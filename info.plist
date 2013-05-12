@@ -78,7 +78,7 @@
 	<key>createdby</key>
 	<string>Josef Weibel</string>
 	<key>description</key>
-	<string>Fahrplan Suche für die Schweiz</string>
+	<string>Finde die nächsten Verbindungen für den öffentlichen Verkehr.</string>
 	<key>disabled</key>
 	<false/>
 	<key>name</key>
@@ -97,11 +97,15 @@
 				<key>runningsubtext</key>
 				<string>Es wird nach Orten gesucht. Einen Moment bitte.</string>
 				<key>script</key>
-				<string>php -f connections.php "{query}"</string>
+				<string># nach [Zielbahnhof] …
+
+# Wenn ein Standard-Startbahnhof angegeben wurde, muss für eine Verbindung ab diesem lediglich noch der Zielbahnhof eingegeben werden, für welchen es auch Vorschläge gibt.
+
+php -f connections.php "{query}"</string>
 				<key>subtext</key>
-				<string>Bitte gib' den Zielort ein.</string>
+				<string>Die nächsten Verbindungen anhand dem Standard-Startort und einem Endort suchen.</string>
 				<key>title</key>
-				<string>Nächste Verbindung suchen</string>
+				<string>Nächste Verbindungen suchen.</string>
 				<key>type</key>
 				<integer>0</integer>
 				<key>withspace</key>
@@ -139,11 +143,15 @@
 				<key>runningsubtext</key>
 				<string>Es wird nach Orten gesucht. Einen Moment bitte.</string>
 				<key>script</key>
-				<string>php -f fromto.php "{query}"</string>
+				<string># von [Startbahnhof] nach [Zielbahnhof] …
+
+# Sucht die nächsten Verbindungen vom Start- zum Zielbahnhof. Für die Bahnhöfe werden Vorschläge angeboten.
+
+php -f fromto.php "{query}"</string>
 				<key>subtext</key>
-				<string>Die nächsten Verbindungen mit einem Start- und Endort suchen</string>
+				<string>Die nächsten Verbindungen anhand einem Start- und einem Endort suchen.</string>
 				<key>title</key>
-				<string>Eine Verbindung suchen</string>
+				<string>Nächste Verbindungen suchen.</string>
 				<key>type</key>
 				<integer>0</integer>
 				<key>withspace</key>
@@ -182,9 +190,13 @@ echo -n "Der neue Startort ist: {query}"</string>
 				<key>runningsubtext</key>
 				<string>Es wird nach Orten gesucht. Einen Moment bitte.</string>
 				<key>script</key>
-				<string>php -f setstart.php "{query}"</string>
+				<string># fahrplan start [Startbahnhof]
+
+# Mit diesem Befehl kann ein Standard-Startbahnhof festgelegt werden. Beispielsweise die Busstation vor dem Haus. So können noch schneller Verbindungen gefunden werden.
+
+php -f setstart.php "{query}"</string>
 				<key>subtext</key>
-				<string>Beginne mit dem Tippen um den Startbahnhof festzulegen.</string>
+				<string>Den Standard-Startort festlegen.</string>
 				<key>title</key>
 				<string>Fahrplan: Startbahnhof festlegen</string>
 				<key>type</key>
@@ -248,9 +260,11 @@ echo -n "Die {query}. Klasse wurde als Standard festgelegt."</string>
 				<key>runningsubtext</key>
 				<string>Klassen werden geladen ...</string>
 				<key>script</key>
-				<string>php -f setclass.php</string>
+				<string># Damit bei der Auslastungsanzeige bei den Verbindungen die Klasse berücksichtigt werden kann, welche auch gefahren wird, kann man mit diesem Befehl zwischen der 1. und 2. wählen.
+
+php -f setclass.php</string>
 				<key>subtext</key>
-				<string>Wird benötigt um die Kapazität bei Verbindungen darzustellen.</string>
+				<string>Wird benötigt um die Auslastung bei Verbindungen darzustellen.</string>
 				<key>title</key>
 				<string>Fahrplan: Klasse festlegen</string>
 				<key>type</key>
@@ -265,7 +279,31 @@ echo -n "Die {query}. Klasse wurde als Standard festgelegt."</string>
 		</dict>
 	</array>
 	<key>readme</key>
-	<string>Test</string>
+	<string>Fahrplan Alfred Workflow
+
+Befehle:
+-	von [Startbahnhof] nach [Zielbahnhof] …
+	Sucht die nächsten Verbindungen vom Start- zum Zielbahnhof. Für die Bahnhöfe werden Vorschläge angeboten.
+
+-	nach [Zielbahnhof] …
+	Wenn ein Standard-Startbahnhof angegeben wurde, muss für eine Verbindung ab diesem lediglich noch der Zielbahnhof eingegeben werden, für welchen es auch Vorschläge gibt.
+
+-	fahrplan start [Startbahnhof]
+	Mit diesem Befehl kann ein Standard-Startbahnhof festgelegt werden. Beispielsweise die Busstation vor dem Haus. So können noch schneller Verbindungen gefunden werden.
+
+-	fahrplan klasse
+	Damit bei der Auslastungsanzeige bei den Verbindungen die Klasse berücksichtigt werden kann, welche auch gefahren wird, kann man mit diesem Befehl zwischen die 1. und 2. wählen.
+
+Updates können über den Alleyoop-Workflow verwaltet werden.
+Daten von der Opendata Transport API (transport.opendata.ch).
+
+Wünsche, Fehlermeldungen und alles andere gerne via:
+Website:		www.josefweibel.ch/alfred/fahrplan
+Mail:		alfred@josefweibel.ch
+Twitter:		@josefweibel
+
+Das Projekt befindet sich auch auf GitHub: 
+https://github.com/josefweibel/Public-Transport-Timetable---Alfred-Workflow</string>
 	<key>uidata</key>
 	<dict>
 		<key>0D355389-0F73-4CF4-93F3-27AD8EEC4179</key>
