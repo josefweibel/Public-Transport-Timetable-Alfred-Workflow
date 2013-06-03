@@ -52,6 +52,7 @@ class TransportUtil
 				$nowFormatted = urlencode( $now->format( "Y-m-d\TH:i" ) );
 
 				$connectionId = 1;
+				$lastDepartureTime = null;
 				foreach( $connections[ "connections" ] as $connection )
 				{
 					$departure = new DateTime( $connection[ "from" ][ "departure" ], $timezone );
@@ -161,10 +162,15 @@ class TransportUtil
 
 					$id = $connection[ "from" ][ "station" ][ "id" ] . "-" . $connection[ "to" ][ "station" ][ "id" ] . "-" .$connection[ "from" ][ "departure" ];
 					// $id = time() . rand();
-					$url = "from=" . urlencode( $connection[ "from" ][ "station" ][ "name" ] )."&to=" . urlencode( $connection[ "to" ][ "station" ][ "name" ] ) . "&datetime=" . $nowFormatted . "&page=1&c=" . $connectionId;
+					$url = "/to/" . urlencode( $connection[ "to" ][ "station" ][ "name" ] ) . "/from/" . urlencode( $connection[ "from" ][ "station" ][ "name" ] ) . "/at/" . $nowFormatted . "?page=" . floor( $connectionId / 4 ) . "&c=" . ( $connectionId % 4 );
 					$response->add( $id, $url, $departureText, $subtext, WorkflowUtil::getImage( "arrow.png" ) );
 
-					$connectionId++;
+					// if there are more than 4 connections per page on trnsprt.ch, count these with the same departure time as one.
+					if( $lastDepartureTime != $connection[ "from" ][ "departure" ] )
+					{
+						$connectionId++;
+					}
+					$lastDepartureTime = $connection[ "from" ][ "departure" ];
 				}
 			}
 			else

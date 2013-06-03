@@ -122,7 +122,7 @@ php -f connections.php "{query}"</string>
 				<key>escaping</key>
 				<integer>4</integer>
 				<key>script</key>
-				<string>open "http://transport.opendata.ch/examples/connections.php?{query}"</string>
+				<string>open "http://trnsprt.ch{query}"</string>
 				<key>type</key>
 				<integer>0</integer>
 			</dict>
@@ -235,22 +235,6 @@ php -f setstart.php "{query}"</string>
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>escaping</key>
-				<integer>63</integer>
-				<key>script</key>
-				<string>echo -n "{query}" &gt; class.txt
-echo -n "Die {query}. Klasse wurde als Standard festgelegt."</string>
-				<key>type</key>
-				<integer>0</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.script</string>
-			<key>uid</key>
-			<string>312149AE-5061-4D27-AFCE-DB7B52B6FEB7</string>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>argumenttype</key>
 				<integer>2</integer>
 				<key>escaping</key>
@@ -276,6 +260,22 @@ php -f setclass.php</string>
 			<string>alfred.workflow.input.scriptfilter</string>
 			<key>uid</key>
 			<string>FD06E847-D67D-4AA9-98DF-714201A287D4</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>escaping</key>
+				<integer>63</integer>
+				<key>script</key>
+				<string>echo -n "{query}" &gt; class.txt
+echo -n "Die {query}. Klasse wurde als Standard festgelegt."</string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>312149AE-5061-4D27-AFCE-DB7B52B6FEB7</string>
 		</dict>
 	</array>
 	<key>readme</key>
