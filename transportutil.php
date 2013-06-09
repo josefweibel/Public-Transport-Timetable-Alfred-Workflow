@@ -19,17 +19,17 @@ class TransportUtil
 				$station = $stations[ $i ];
 				if( strtolower( $not ) != strtolower( $station[ "name" ] ) )
 				{
-					$response->add( $station[ "id" ], $station[ "name" ], $station[ "name" ], $subtextPrefix.$station[ "name" ].$subtextSuffix, WorkflowUtil::getImage( "station.png" ), "no", $autoPrefix.$station[ "name" ].$autoSuffix );
+					$response->add( $station[ "id" ], $station[ "name" ], $station[ "name" ], $subtextPrefix.$station[ "name" ].$subtextSuffix, WorkflowUtil::getImage( "station.png" ), $autoPrefix == null && $autoSuffix == null ? "yes" : "no", $autoPrefix.$station[ "name" ].$autoSuffix );
 				}
 				else if( count( $stations ) == 1 )
 				{
-					$response->add( "nothing", $orig, "Du befindest dich schon hier", $station[ "name" ] . " ist dein Startbahnhof. ", WorkflowUtil::getImage( "icon.png" ) );
+					$response->add( "nothing", $orig, "Du befindest dich bereits hier", $station[ "name" ] . " ist dein Startbahnhof. ", WorkflowUtil::getImage( "icon.png" ) );
 				}
 			}
 		}
 		else
 		{
-			$response->add( "nothing", $orig, "Kein Ort gefunden", "Es wurde kein passender Ort gefunden.", WorkflowUtil::getImage( "icon.png" ) );
+			$response->add( "nothing", $orig, "Hier ist nichts ...", "Es konnte leider kein passender Ort gefunden werden.", WorkflowUtil::getImage( "icon.png" ) );
 		}
 
 		return $response;
@@ -38,20 +38,26 @@ class TransportUtil
 	public static function getConnections( $from, $to, $withToInSubtext, $withFromInSubtext, $samePlace, &$response )
 	{
 		$badNames = array( "T" => "Tram", "B" => "Bus", "NFB" => "NF Bus", "NFT" => "NF Tram" );
-		$class = trim( fgets( fopen( "class.txt", "r" ) ) );
+		$class = WorkflowUtil::getValue( "config", "class" );
 
-		$conResponse = WorkflowUtil::request( "http://transport.opendata.ch/v1/connections?limit=6&from=".urlencode( $from )."&to=".urlencode( $to ) );
-		$connections = json_decode( $conResponse, true );
-
-		if( strtolower( $from ) != strtolower( $to ) )
+		if( !$class )
 		{
+			$class = 2;
+		}
+
+		if( strtolower( WorkflowUtil::normalize( $from ) ) != strtolower( $to ) )
+		{
+			$conResponse = WorkflowUtil::request( "http://transport.opendata.ch/v1/connections?limit=6&from=".urlencode( $from )."&to=".urlencode( $to ) );
+			$connections = json_decode( $conResponse, true );
+
 			if( $connections[ "connections" ] && count( $connections[ "connections" ] ) > 0 )
 			{
 				$timezone = new DateTimeZone( "Europe/Zurich" );
 				$now = new DateTime( null, $timezone );
 				$nowFormatted = urlencode( $now->format( "Y-m-d\TH:i" ) );
 
-				$connectionId = 1;
+				$connectionId = 0;
+				$perSite = 4;
 				$lastDepartureTime = null;
 				foreach( $connections[ "connections" ] as $connection )
 				{
@@ -160,27 +166,28 @@ class TransportUtil
 
 					$subtext .= ".";
 
+					// if there are connections with the same departure time, increment the amount per site.
+					if( $lastDepartureTime == $connection[ "from" ][ "departure" ] )
+					{
+						$perSite++;
+					}
+
 					$id = $connection[ "from" ][ "station" ][ "id" ] . "-" . $connection[ "to" ][ "station" ][ "id" ] . "-" .$connection[ "from" ][ "departure" ];
-					// $id = time() . rand();
-					$url = "/to/" . urlencode( $connection[ "to" ][ "station" ][ "name" ] ) . "/from/" . urlencode( $connection[ "from" ][ "station" ][ "name" ] ) . "/at/" . $nowFormatted . "?page=" . floor( $connectionId / 4 ) . "&c=" . ( $connectionId % 4 );
+					$url = "/to/" . urlencode( $connection[ "to" ][ "station" ][ "name" ] ) . "/from/" . urlencode( $connection[ "from" ][ "station" ][ "name" ] ) . "/at/" . $nowFormatted . "?page=" . floor( $connectionId / $perSite ) . "&c=" . ( ( $connectionId  % $perSite ) + 1 );
 					$response->add( $id, $url, $departureText, $subtext, WorkflowUtil::getImage( "arrow.png" ) );
 
-					// if there are more than 4 connections per page on trnsprt.ch, count these with the same departure time as one.
-					if( $lastDepartureTime != $connection[ "from" ][ "departure" ] )
-					{
-						$connectionId++;
-					}
+					$connectionId++;
 					$lastDepartureTime = $connection[ "from" ][ "departure" ];
 				}
 			}
 			else
 			{
-				$response->add( "nothing", $orig, "Keine Verbindungen", "Leider konnten keine Verbindungen gefunden werden.", WorkflowUtil::getImage( "icon.png" ) );
+				$response->add( "nothing", $orig, "Nichts gefunden ...", "Leider konnten keine Verbindungen gefunden werden.", WorkflowUtil::getImage( "icon.png" ) );
 			}
 		}
 		else
 		{
-			$response->add( "nothing", $orig, "Du befindest dich schon hier.", $from . " ist bereits dein Startbahnhof. ".$samePlace, WorkflowUtil::getImage( "icon.png" ) );
+			$response->add( "nothing", $orig, "Für das braucht es keinen öffentlichen Verkehr ...", "Du kannst nicht denselben Ort für den Start und das Zeil verwenden.", WorkflowUtil::getImage( "icon.png" ) );
 		}
 	}
 }

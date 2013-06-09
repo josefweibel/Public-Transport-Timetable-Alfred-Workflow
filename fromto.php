@@ -14,11 +14,11 @@ if( $fromEnd === false )
 	$from = trim( $query );
 	if( empty( $from ) )
 	{
-		$response->add( "nothing", $orig, "Bitte den Abfahrtsort eingeben.", "", WorkflowUtil::getImage( "icon.png" ) );
+		$response->add( "nothing", $orig, "Wo bist du?", "Einfach mit tippen beginnen ...", WorkflowUtil::getImage( "icon.png" ) );
 	}
 	else
 	{
-		TransportUtil::getLocations( $from, "", "Auswählen um ", " als Abfahrtsort zu verwenden.", "", " nach ", $response );
+		TransportUtil::getLocations( $from, "", "", " als Abfahrtsort verwenden.", "", " nach ", $response );
 	}
 }
 else
@@ -32,11 +32,11 @@ else
 		$to = trim( substr( $query, $fromEnd + 6 ) );
 		if( empty( $to ) )
 		{
-			$response->add( "nothing", $orig, "Bitte den Zielort eingeben.", "", WorkflowUtil::getImage( "icon.png" ) );
+			$response->add( "nothing", $orig, "Wo willst du hin?", "Du bist nicht mehr weit von deinen Verbindungen entfernt.", WorkflowUtil::getImage( "icon.png" ) );
 		}
 		else
 		{
-			TransportUtil::getLocations( $to, "", "Auswählen um ", " als Zielort zu verwenden.", $fromHuman . " nach ", " ...", $response );
+			TransportUtil::getLocations( $to, $from, "Verbindungen von " . $from . " nach ", " anzeigen.", $fromHuman . " nach ", " ...", $response );
 		}
 	}
 	else
