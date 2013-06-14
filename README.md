@@ -35,7 +35,8 @@ This workflow supports the [Alleyoop update workflow](http://www.alfredforum.com
 
 
 ## planned features
-**v1.1** You will be able to add a departure or arrival date and time.
+* You will be able to add a departure or arrival date and time.
+* There will be a take-me-home function.
 
 ## data source
 This worklow uses the great [Opendata Transport API](http://transport.opendata.ch).
