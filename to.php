@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Handles the take-me-home- and the to-action.
+ * Expample: php -f to.php "Bern" 1
+ * @param start- or destination name. If there are three points " ..." at the end, the script will return the connections, otherwise suggestions for the station.
+ * @param 1 if the given station is the destination station, 0 if it is the start station.
+ */
+
 require_once( "workflowutil.php" );
 require_once( "response.php" );
 require_once( "transportutil.php" );
@@ -26,7 +33,7 @@ else if( $isTo )
 }
 else
 {
-	TransportUtil::getLocations( $normHome, $query, "Verbindungen von ", " nach " . $home . " anzeigen.", "", " ...", $response );
+	TransportUtil::getLocations( $query, $normHome, "Verbindungen von ", " nach " . $home . " anzeigen.", "", " ...", $response );
 }
 
 echo $response->export();

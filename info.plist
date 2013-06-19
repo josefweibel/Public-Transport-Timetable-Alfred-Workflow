@@ -17,6 +17,17 @@
 				<string></string>
 			</dict>
 		</array>
+		<key>0F7CF2D0-94B9-4B5C-95F4-16A7869B3E6D</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>0D355389-0F73-4CF4-93F3-27AD8EEC4179</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
 		<key>312149AE-5061-4D27-AFCE-DB7B52B6FEB7</key>
 		<array>
 			<dict>
@@ -33,6 +44,17 @@
 			<dict>
 				<key>destinationuid</key>
 				<string>C72091C6-BC34-459E-8B1A-00E0B3E6627A</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
+		<key>5832FF80-CBC7-4024-8550-9563D6EB71E9</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>395896E6-7CA4-4598-A319-257F3BD4EC42</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -74,6 +96,17 @@
 		</array>
 		<key>C72091C6-BC34-459E-8B1A-00E0B3E6627A</key>
 		<array/>
+		<key>DA1650D7-A977-423C-9FAE-613D7BCB54FD</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>C0C17423-71ED-46A0-AE93-5EC688FB0FCC</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
 		<key>FD06E847-D67D-4AA9-98DF-714201A287D4</key>
 		<array>
 			<dict>
@@ -132,6 +165,31 @@ php -f to.php "{query}" 1</string>
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>action</key>
+				<integer>0</integer>
+				<key>argument</key>
+				<integer>0</integer>
+				<key>hotkey</key>
+				<integer>45</integer>
+				<key>hotmod</key>
+				<integer>393216</integer>
+				<key>hotstring</key>
+				<string>N</string>
+				<key>leftcursor</key>
+				<false/>
+				<key>modsmode</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.hotkey</string>
+			<key>uid</key>
+			<string>DA1650D7-A977-423C-9FAE-613D7BCB54FD</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>argumenttype</key>
 				<integer>0</integer>
 				<key>escaping</key>
@@ -182,6 +240,31 @@ php -f fromto.php "{query}"</string>
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>action</key>
+				<integer>0</integer>
+				<key>argument</key>
+				<integer>0</integer>
+				<key>hotkey</key>
+				<integer>9</integer>
+				<key>hotmod</key>
+				<integer>393216</integer>
+				<key>hotstring</key>
+				<string>V</string>
+				<key>leftcursor</key>
+				<false/>
+				<key>modsmode</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.hotkey</string>
+			<key>uid</key>
+			<string>0F7CF2D0-94B9-4B5C-95F4-16A7869B3E6D</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>argumenttype</key>
 				<integer>0</integer>
 				<key>escaping</key>
@@ -215,20 +298,25 @@ php -f to.php "{query}" 0</string>
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>escaping</key>
+				<key>action</key>
 				<integer>0</integer>
-				<key>script</key>
-				<string>require_once( "workflowutil.php" );
-
-WorkflowUtil::setValue( "config", array( "home" =&gt; "{query}" ) );
-echo "Der neue Startort ist: {query}";</string>
-				<key>type</key>
-				<integer>1</integer>
+				<key>argument</key>
+				<integer>0</integer>
+				<key>hotkey</key>
+				<integer>4</integer>
+				<key>hotmod</key>
+				<integer>393216</integer>
+				<key>hotstring</key>
+				<string>H</string>
+				<key>leftcursor</key>
+				<false/>
+				<key>modsmode</key>
+				<integer>0</integer>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.action.script</string>
+			<string>alfred.workflow.trigger.hotkey</string>
 			<key>uid</key>
-			<string>5EACFDAB-08C1-461C-A920-EE80BB84A2F6</string>
+			<string>5832FF80-CBC7-4024-8550-9563D6EB71E9</string>
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
@@ -268,6 +356,26 @@ php -f setstart.php "{query}"</string>
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>script</key>
+				<string>require_once( "workflowutil.php" );
+
+WorkflowUtil::setValue( "config", array( "home" =&gt; "{query}" ) );
+echo "Der neue Startort ist: {query}";</string>
+				<key>type</key>
+				<integer>1</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>5EACFDAB-08C1-461C-A920-EE80BB84A2F6</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>lastpathcomponent</key>
 				<false/>
 				<key>onlyshowifquerypopulated</key>
@@ -287,26 +395,6 @@ php -f setstart.php "{query}"</string>
 			<string>alfred.workflow.output.notification</string>
 			<key>uid</key>
 			<string>7C43AE75-9D30-4DA5-B43C-60D840BB93BD</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>escaping</key>
-				<integer>0</integer>
-				<key>script</key>
-				<string>require_once( "workflowutil.php" );
-
-WorkflowUtil::setValue( "config", array( "class" =&gt; {query} ) );
-echo "Die {query}. Klasse wurde als Standard festgelegt.";</string>
-				<key>type</key>
-				<integer>1</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.script</string>
-			<key>uid</key>
-			<string>312149AE-5061-4D27-AFCE-DB7B52B6FEB7</string>
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
@@ -338,6 +426,26 @@ php -f setclass.php</string>
 			<string>alfred.workflow.input.scriptfilter</string>
 			<key>uid</key>
 			<string>FD06E847-D67D-4AA9-98DF-714201A287D4</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>script</key>
+				<string>require_once( "workflowutil.php" );
+
+WorkflowUtil::setValue( "config", array( "class" =&gt; {query} ) );
+echo "Die {query}. Klasse wurde als Standard festgelegt.";</string>
+				<key>type</key>
+				<integer>1</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>312149AE-5061-4D27-AFCE-DB7B52B6FEB7</string>
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
@@ -375,12 +483,22 @@ https://github.com/josefweibel/Public-Transport-Timetable---Alfred-Workflow</str
 			<key>ypos</key>
 			<real>180</real>
 		</dict>
+		<key>0F7CF2D0-94B9-4B5C-95F4-16A7869B3E6D</key>
+		<dict>
+			<key>ypos</key>
+			<real>180</real>
+		</dict>
 		<key>312149AE-5061-4D27-AFCE-DB7B52B6FEB7</key>
 		<dict>
 			<key>ypos</key>
 			<real>540</real>
 		</dict>
 		<key>395896E6-7CA4-4598-A319-257F3BD4EC42</key>
+		<dict>
+			<key>ypos</key>
+			<real>300</real>
+		</dict>
+		<key>5832FF80-CBC7-4024-8550-9563D6EB71E9</key>
 		<dict>
 			<key>ypos</key>
 			<real>300</real>
@@ -409,6 +527,11 @@ https://github.com/josefweibel/Public-Transport-Timetable---Alfred-Workflow</str
 		<dict>
 			<key>ypos</key>
 			<real>180</real>
+		</dict>
+		<key>DA1650D7-A977-423C-9FAE-613D7BCB54FD</key>
+		<dict>
+			<key>ypos</key>
+			<real>60</real>
 		</dict>
 		<key>FD06E847-D67D-4AA9-98DF-714201A287D4</key>
 		<dict>

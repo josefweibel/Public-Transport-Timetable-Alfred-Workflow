@@ -1,4 +1,11 @@
 <?php
+
+/**
+ * Handles the from-to-action. This script will give suggestions for the stations and if there are three points " ..." at the end of the query, it will return the requested connections.
+ * Expample: php -f fromto.php "Bern nach HB"
+ * @param [start station] ["nach"] [destination station] [" ..."].
+ */
+
 require_once( "workflowutil.php" );
 require_once( "response.php" );
 require_once( "transportutil.php" );

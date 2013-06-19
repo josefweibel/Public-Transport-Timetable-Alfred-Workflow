@@ -1,5 +1,5 @@
 <?php
-class TransportUtil
+abstract class TransportUtil
 {
 	public static function getLocations( $query, $not = "", $subtextPrefix, $subtextSuffix, $autoPrefix, $autoSuffix, &$response, $max = 10 )
 	{
