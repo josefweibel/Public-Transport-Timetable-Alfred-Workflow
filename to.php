@@ -6,21 +6,27 @@ require_once( "transportutil.php" );
 $response = new Response();
 
 $query = WorkflowUtil::normalize( trim( $argv[1] ) );
-$start = WorkflowUtil::getValue( "config", "home" );
-$normStart = WorkflowUtil::normalize( $start );
+$isTo = $argv[2];
 
-if( empty( $start ) )
+$home = WorkflowUtil::getValue( "config", "home" );
+$normHome = WorkflowUtil::normalize( $home );
+
+if( empty( $home ) )
 {
 	$response->add( "nothing", $orig, "Du hast noch keine Heimstation festgelegt.", "Ändere das, indem du 'fahrplan set' in Alfred tippst. Alternativ kannst du auch mit 'von' eine Suche mit Startstation machen.", WorkflowUtil::getImage( "icon.png" ) );
 }
 else if( substr( $query, -4 ) === " ..." )
 {
 	$query = substr( $query, 0, strlen( $query ) - 4 );
-	TransportUtil::getConnections( $normStart, $query, false, true, "", $response );
+	TransportUtil::getConnections( $isTo ? $normHome : $query, $isTo ? $query : $normHome, !$isTo, $isTo, "", $response );
+}
+else if( $isTo )
+{
+	TransportUtil::getLocations( $query, $normHome, "Verbindungen von " . $home . " nach ", " anzeigen.", "", " ...", $response );
 }
 else
 {
-	TransportUtil::getLocations( $query, $normStart, "Verbindungen von " . $start . " nach ", " anzeigen.", "", " ...", $response );
+	TransportUtil::getLocations( $normHome, $query, "Verbindungen von ", " nach " . $home . " anzeigen.", "", " ...", $response );
 }
 
 echo $response->export();
