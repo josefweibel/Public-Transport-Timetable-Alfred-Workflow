@@ -68,6 +68,7 @@ else
 	}
 	else
 	{
+		$to = TransportUtil::getStationForHome( $to );
 		TransportUtil::addConnections( $response, $from, $to, 
 				$timeKeyword->getTime( $realquery ), false, false );
 	}

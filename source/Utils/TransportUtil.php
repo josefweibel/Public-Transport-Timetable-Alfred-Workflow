@@ -125,13 +125,13 @@ abstract class TransportUtil
 	
 	/**
 	 * Adds connections from the Transport API to the given response.
-	 * @param type $response
-	 * @param type $from
-	 * @param type $to
-	 * @param type $date
-	 * @param type $withFromInSubtext
-	 * @param type $withToInSubtext
-	 * @param type $max
+	 * @param Response $response
+	 * @param string $from
+	 * @param string $to
+	 * @param DateTime $date
+	 * @param string $withFromInSubtext
+	 * @param string $withToInSubtext
+	 * @param int $max (optional, default = 6, max = 6)
 	 */
 	public static function addConnections( &$response, $from, $to, $date, 
 			$withFromInSubtext, $withToInSubtext, $max = 6 )
@@ -385,5 +385,30 @@ abstract class TransportUtil
 		}
 		
 		return $class;
+	}
+	
+	/**
+	 * @return string home station of the user from the config file or null if not setted.
+	 */
+	public static function getHome()
+	{
+		return WorkflowUtil::getValue( "config", "home" );
+	}
+	
+	/**
+	 * @param string $query one station to check.
+	 * @return string the home station if the $query is equal to the 
+	 * self::$homeKeyword otherwise the given $query.
+	 */
+	public static function getStationForHome( $query )
+	{
+		$home = self::getHome();
+		
+		if( preg_match( "/" . self::$homeKeyword . "$/i", trim( $query ) ) && $home )
+		{
+			return $home;
+		}
+		
+		return $query;
 	}
 }
