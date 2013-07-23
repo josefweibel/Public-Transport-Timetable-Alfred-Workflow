@@ -1,4 +1,5 @@
 <?php
+namespace Utils;
 
 /**
  * A very usefull and beautiful class which helps the workflow developer to create wonderfull workflows.
@@ -47,7 +48,7 @@ abstract class WorkflowUtil
 	 */
 	public static function normalize( $someString )
 	{
-		return preg_replace( "/[^a-zA-Z0-9_ %\[\]\.\(\)%&-]/s", "", $someString );
+		return preg_replace( "/[^a-zA-Z0-9_ %\[\]\.\(\)%&-:]/s", "", $someString );
 	}
 
 	/**

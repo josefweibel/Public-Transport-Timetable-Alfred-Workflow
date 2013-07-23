@@ -1,13 +1,38 @@
 <?php
+namespace Utils;
+
+use \SimpleXMLElement;
 
 /**
- * Result of a request.
- * Generates a Alfred valid XML.
+ * Result of a request. Generates a Alfred valid XML.
+ * @author Josef Weibel <a href="http://www.josefweibel.ch">www.josefweibel.ch</a>
  */
 class Response
 {
+	/**
+	 * The array with all results. One result is one subarray which contains key-value-pairs.
+	 * @var array with arrays 
+	 */
 	private $results = array();
 
+	/**
+	 * Adds a new result to the response.
+	 * @param string $uid an unique id for this result. 
+	 *		  Alfred sorts the result by amount of selection.
+	 * @param string $arg the value which will transmitted to the next 
+	 *		  item in this workflow if the user selects this result.
+	 * @param string $title the great title
+	 * @param string $sub the little subtitle.
+	 * @param string $icon the filename of an icon. If empty, the default workflow icon will used.
+	 *		  You can also set a filetype.
+	 * @param string $valid yes or no. Default yes. If 'no' you have to set the $auto param.
+	 *		  If the user selects result the $auto content will written into the Alfredbox.
+	 * @param string $auto default null. See $valid param.
+	 * @param string $type default null. If you set 'file' than the result represents a file
+	 *		  and Alfred will show the user actions for the file.
+	 * @return array the added result.
+	 * @see http://www.alfredforum.com/topic/5-generating-feedback-in-workflows/
+	 */
 	public function add( $uid, $arg, $title, $sub, $icon, $valid='yes', $auto=null, $type=null )
 	{
 		$result = array(
@@ -31,6 +56,10 @@ class Response
 		return $result;
 	}
 
+	/**
+	 * Casts the $results to an Alfred-valid xml.
+	 * @return string a valid xml.
+	 */
 	public function export()
 	{
 		$items = new SimpleXMLElement("<items></items>");

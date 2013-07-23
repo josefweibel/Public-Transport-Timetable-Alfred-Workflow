@@ -145,7 +145,7 @@
 
 # Wenn ein Standard-Startbahnhof angegeben wurde, muss für eine Verbindung ab diesem lediglich noch der Zielbahnhof eingegeben werden, für welchen es auch Vorschläge gibt.
 
-php -f to.php "{query}" 1</string>
+php -f source/Dispatcher/ToDispatcher.php "{query}" 1</string>
 				<key>subtext</key>
 				<string>Die nächsten Verbindungen anhand dem Standard-Startort und einem Endort suchen.</string>
 				<key>title</key>
@@ -203,7 +203,7 @@ php -f to.php "{query}" 1</string>
 
 # Sucht die nächsten Verbindungen vom Start- zum Zielbahnhof. Für die Bahnhöfe werden Vorschläge angeboten.
 
-php -f fromto.php "{query}"</string>
+php -f source/Dispatcher/FromToDispatcher.php "{query}"</string>
 				<key>subtext</key>
 				<string>Die nächsten Verbindungen anhand einem Start- und einem Endort suchen.</string>
 				<key>title</key>
@@ -278,7 +278,7 @@ php -f fromto.php "{query}"</string>
 
 # Sucht die nächsten Verbindungen um vom angegebenen Startbahnhof zum definierten Heimbahnhof zu gelangen.
 
-php -f to.php "{query}" 0</string>
+php -f source/Dispatcher/ToDispatcher.php "{query}" 0</string>
 				<key>subtext</key>
 				<string>Die nächsten Verbindungen anhand einem Start- und einem Endort suchen.</string>
 				<key>title</key>
@@ -336,7 +336,7 @@ php -f to.php "{query}" 0</string>
 
 # Mit diesem Befehl kann ein Standard-Startbahnhof festgelegt werden. Beispielsweise die Busstation vor dem Haus. So können noch schneller Verbindungen gefunden werden.
 
-php -f setstart.php "{query}"</string>
+php -f source/Dispatcher/StartDispatcher.php "{query}"</string>
 				<key>subtext</key>
 				<string>Den Standard-Startort festlegen.</string>
 				<key>title</key>
@@ -359,10 +359,11 @@ php -f setstart.php "{query}"</string>
 				<key>escaping</key>
 				<integer>0</integer>
 				<key>script</key>
-				<string>require_once( "workflowutil.php" );
+				<string>use Utils\WorkflowUtil;
+require_once 'source/Utils/WorkflowUtil.php';
 
 WorkflowUtil::setValue( "config", array( "home" =&gt; "{query}" ) );
-echo "Der neue Startort ist: {query}";</string>
+echo "Der neue Heimbahnhof ist {query}.";</string>
 				<key>type</key>
 				<integer>1</integer>
 			</dict>
@@ -412,7 +413,7 @@ echo "Der neue Startort ist: {query}";</string>
 				<key>script</key>
 				<string># Damit bei der Auslastungsanzeige bei den Verbindungen die Klasse berücksichtigt werden kann, welche auch gefahren wird, kann man mit diesem Befehl zwischen der 1. und 2. wählen.
 
-php -f setclass.php</string>
+php -f source/Dispatcher/ClassDispatcher.php</string>
 				<key>subtext</key>
 				<string>Wird benötigt um die Auslastung bei Verbindungen darzustellen.</string>
 				<key>title</key>
@@ -435,7 +436,8 @@ php -f setclass.php</string>
 				<key>escaping</key>
 				<integer>0</integer>
 				<key>script</key>
-				<string>require_once( "workflowutil.php" );
+				<string>use Utils\WorkflowUtil;
+require_once 'source/Utils/WorkflowUtil.php';
 
 WorkflowUtil::setValue( "config", array( "class" =&gt; {query} ) );
 echo "Die {query}. Klasse wurde als Standard festgelegt.";</string>
