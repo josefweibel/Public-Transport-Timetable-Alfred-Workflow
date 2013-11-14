@@ -1,11 +1,9 @@
 <?php
 namespace TimeKeywords;
 
-use DateTime;
-use DateTimeZone;
 use TimeKeywords\AHourMinuteTimeKeyword;
 
-require_once 'source/TimeKeywords/AHourMinuteTimeKeyword.php';
+require_once 'src/TimeKeywords/AHourMinuteTimeKeyword.php';
 
 /**
  * Represents a time for the current day.
@@ -27,13 +25,6 @@ class TodayTimeKeyword extends AHourMinuteTimeKeyword
 	 */
 	public function getTime( $query )
 	{
-		$timezone = new DateTimeZone( "Europe/Zurich" );
-		
-		$results = array();
-		preg_match( "/ ([01]?[0-9]|2[0-3]):([0-5][0-9])$/i", $query, $results );
-
-		$date = new DateTime( "now", $timezone );
-		$date->setTime( intval( $results[1] ), intval( $results[2] ), 0 );
-		return $date;
+		return $this->getDateTimeFromQuery( $query, "now" );
 	}
 }

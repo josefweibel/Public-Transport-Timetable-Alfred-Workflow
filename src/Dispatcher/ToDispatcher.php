@@ -6,10 +6,10 @@ use TimeKeywords\TimeKeywordManager;
 use Utils\TransportUtil;
 use Utils\WorkflowUtil;
 
-require_once 'source/Utils/Response.php';
-require_once 'source/TimeKeywords/TimeKeywordManager.php';
-require_once 'source/Utils/TransportUtil.php';
-require_once 'source/Utils/WorkflowUtil.php';
+require_once 'src/Utils/Response.php';
+require_once 'src/TimeKeywords/TimeKeywordManager.php';
+require_once 'src/Utils/TransportUtil.php';
+require_once 'src/Utils/WorkflowUtil.php';
 
 
 /**
@@ -32,29 +32,29 @@ $timeKeyword = TimeKeywordManager::getTimeKeyword( $query );
 
 if( empty( $home ) )
 {
-	$response->add( "nothing", "nothing", "Du hast noch keine Heimstation festgelegt.", 
-			"Ändere das, indem du 'fahrplan set' in Alfred tippst. " . 
-			"Alternativ kannst du auch mit 'von' eine Suche mit Startstation machen.", 
+	$response->add( "nothing", "nothing", "Du hast noch keine Heimstation festgelegt.",
+			"Ändere das, indem du 'fahrplan set' in Alfred tippst. " .
+			"Alternativ kannst du auch mit 'von' eine Suche mit Startstation machen.",
 			WorkflowUtil::getImage( "icon.png" ) );
 }
 else if( $timeKeyword )
 {
 	$station = $timeKeyword->removeTimeKeyword( $query );
-	TransportUtil::addConnections( $response, $isTo ? $normHome : $station, 
-			$isTo ? $station : $normHome, $timeKeyword->getTime( $query ), 
+	TransportUtil::addConnections( $response, $isTo ? $normHome : $station,
+			$isTo ? $station : $normHome, $timeKeyword->getTime( $query ),
 			!$isTo, $isTo );
 }
 else if( $isTo )
 {
-	TransportUtil::addLocations( $response, $query, $normHome, 
-			"Verbindungen von " . $home . " nach ", " anzeigen.", 
-			true, "", " " . TransportUtil::$nowKeyword );
+	TransportUtil::addLocations( $response, $query, $normHome,
+			"Verbindungen von " . $home . " nach ", " anzeigen.",
+			true, "", " " . TransportUtil::KEYWORD_NOW );
 }
 else
 {
-	TransportUtil::addLocations( $response, $query, $normHome, 
+	TransportUtil::addLocations( $response, $query, $normHome,
 			"Verbindungen von ", " nach " . $home . " anzeigen.",
-			true, "", " " . TransportUtil::$nowKeyword );
+			true, "", " " . TransportUtil::KEYWORD_NOW );
 }
 
 echo $response->export();

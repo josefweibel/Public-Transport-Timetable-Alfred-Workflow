@@ -14,30 +14,30 @@ use Utils\WorkflowUtil;
 abstract class TransportUtil
 {
 	/**
-	 * @var string default TimeKeyword 
+	 * @var string default TimeKeyword
 	 */
-	public static $nowKeyword = "jetzt";
-	
+	const KEYWORD_NOW = "jetzt";
+
 	/**
-	 * @var string keyword for take me home. 
+	 * @var string keyword for take me home.
 	 */
-	public static $homeKeyword = "Hause";
-	
+	const KEYWORD_HOME = "Hause";
+
 	/**
-	 * @var string url to get locations. 
+	 * @var string url to get locations.
 	 */
-	public static $urlLocations = "http://transport.opendata.ch/v1/locations?";
-	
+	const URL_LOCATIONS = "http://transport.opendata.ch/v1/locations?";
+
 	/**
-	 * @var string url to get connections. 
+	 * @var string url to get connections.
 	 */
-	public static $urlConnections = "http://transport.opendata.ch/v1/connections?";
-	
+	const URL_CONNECTIONS = "http://transport.opendata.ch/v1/connections?";
+
 	/**
 	 * @var array of transport shortcuts which are complicated to understand.
 	 * complicated shortcut => nice shortcut
 	 */
-	public static $badNames = array( "T" => "Tram", "B" => "Bus", "NFB" => "NF Bus", "NFT" => "NF Tram" );
+	public static $badnames = array( "T" => "Tram", "B" => "Bus", "NFB" => "NF Bus", "NFT" => "NF Tram" );
 
 	/**
 	 * Adds locations from the Transport API to the given response.
@@ -51,23 +51,23 @@ abstract class TransportUtil
 	 * @param String $okSuffix (optional)
 	 * @param int $max (optional, default = 10)
 	 */
-	public static function addLocations( &$response, $query, $exclude, $titlePrefix, 
+	public static function addLocations( &$response, $query, $exclude, $titlePrefix,
 			$titleSuffix, $isOk = false, $okPrefix = null, $okSuffix = null, $max = 10 )
 	{
-		// if the query equals the excluded name, add an comma to 
-		// get stations for the city in the query.
+		// if the query is equal to the excluded name, add a comma to
+		// get stations of the city in the query.
 		if( strtolower( $query ) == strtolower( $exclude ) )
 		{
 			$query = $query . ", ";
 		}
-		
+
 		$params = array( "query" => $query );
-		
+
 		// get the results
-		$json = WorkflowUtil::request( self::$urlLocations . http_build_query( $params ) );
+		$json = WorkflowUtil::request( self::URL_LOCATIONS . http_build_query( $params ) );
 		$result = json_decode( $json );
 		$stations = $result->stations;
-		
+
 		if( $stations )
 		{
 			$stationIndex = 0;
@@ -77,20 +77,20 @@ abstract class TransportUtil
 				{
 					break;
 				}
-				
+
 				if( strtolower( $station->name ) != strtolower( $exclude ) )
 				{
 					// add station to the response
 					$response->add( $station->id, $station->name, $station->name,
-							$titlePrefix.$station->name.$titleSuffix, 
-							WorkflowUtil::getImage( "station.png" ), !$isOk ? "yes" : "no", 
+							$titlePrefix.$station->name.$titleSuffix,
+							WorkflowUtil::getImage( "station.png" ), !$isOk ? "yes" : "no",
 							$okPrefix.$station->name.$okSuffix );
 				}
 				elseif ( count( $stations ) === 1 )
 				{
 					// the single station is excluded -> message
-					$response->add( "nothing", "nothing", "Du befindest dich bereits hier", 
-							$station->name . " ist dein Startbahnhof. ", 
+					$response->add( "nothing", "nothing", "Du befindest dich bereits hier",
+							$station->name . " ist dein Startbahnhof. ",
 							WorkflowUtil::getImage( "icon.png" ) );
 				}
 			}
@@ -98,12 +98,12 @@ abstract class TransportUtil
 		else
 		{
 			// no results found (or server could be down) -> message
-			$response->add( "nothing", "nothing", "Hier ist nichts ...", 
-					"Es konnte leider kein passender Ort gefunden werden.", 
+			$response->add( "nothing", "nothing", "Hier ist nichts ...",
+					"Es konnte leider kein passender Ort gefunden werden.",
 					WorkflowUtil::getImage( "icon.png" ) );
 		}
 	}
-	
+
 	/**
 	 * Adds the home location if it matches with the query to the response.
 	 * @param Response $response
@@ -114,15 +114,15 @@ abstract class TransportUtil
 	 */
 	public static function addHomeLocation( &$response, $query, $isOk, $okPrefix, $okSuffix )
 	{
-		if( strpos( self::$homeKeyword, $query ) !== false )
+		if( strpos( self::KEYWORD_HOME, $query ) !== false )
 		{
-			$response->add( self::$homeKeyword, self::$homeKeyword, self::$homeKeyword, 
-					"Die nächsten Verbindungen zu dir nach Hause anzeigen.", 
-					WorkflowUtil::getImage( "station.png" ), !$isOk ? "yes" : "no", 
-					$okPrefix.self::$homeKeyword.$okSuffix );
+			$response->add( self::KEYWORD_HOME, self::KEYWORD_HOME, self::KEYWORD_HOME,
+					"Die nächsten Verbindungen zu dir nach Hause anzeigen.",
+					WorkflowUtil::getImage( "station.png" ), !$isOk ? "yes" : "no",
+					$okPrefix.self::KEYWORD_HOME.$okSuffix );
 		}
 	}
-	
+
 	/**
 	 * Adds connections from the Transport API to the given response.
 	 * @param Response $response
@@ -133,46 +133,45 @@ abstract class TransportUtil
 	 * @param string $withToInSubtext
 	 * @param int $max (optional, default = 6, max = 6)
 	 */
-	public static function addConnections( &$response, $from, $to, $date, 
+	public static function addConnections( &$response, $from, $to, $date,
 			$withFromInSubtext, $withToInSubtext, $max = 6 )
-	{	
+	{
 		if( strtolower( $from ) != strtolower( $to ) )
 		{
 			$onlyDate = $date->format( "Y-m-d" );
 			$onlyTime = $date->format( "H:i" );
-			
-			$params = array( "limit" => $max, "from" => $from, "to" => $to, 
+
+			$params = array( "limit" => $max, "from" => $from, "to" => $to,
 				"date" => $onlyDate, "time" => $onlyTime );
-		
+
 			// get the results
-			$json = WorkflowUtil::request( self::$urlConnections . http_build_query( $params ) );
+			$json = WorkflowUtil::request( self::URL_CONNECTIONS . http_build_query( $params ) );
 			$result = json_decode( $json );
 			$connections = $result->connections;
-			
+
 			if( $connections )
 			{
 				$class = self::getClass();
-				
+
 				$timezone = new DateTimeZone( "Europe/Zurich" );
 				$now = new DateTime( null, $timezone );
-				$nowFormatted = urlencode( $now->format( "Y-m-d\TH:i" ) );
-				
+
 				// used to determinate index of connection on trnsprt.ch
 				$connectionIndex = 0;
 				$perSite = 4;
 				$lastDepartureTime = null;
-				
+
 				foreach ( $connections as $connection )
 				{
 					$departure = new DateTime( $connection->from->departure, $timezone );
 					$arrival = new DateTime( $connection->to->arrival, $timezone );
-					
+
 					$relativeDeparture = $now->diff( $departure );
 					$duration = $departure->diff( $arrival );
 					$secondsToDeparture = $departure->getTimestamp() - $now->getTimestamp();
-					
+
 					$capacity = $class === 2 ? $connection->capacity2nd : $connection->capacity1st;
-					
+
 					$departureText = "";
 					if( $secondsToDeparture <= -60 * 60 * 2 ) // more than 2 hours ago
 					{
@@ -180,15 +179,15 @@ abstract class TransportUtil
 					}
 					else if( $secondsToDeparture <= -60 * 62 ) // between 2 minutes and 2 hours ago
 					{
-						$departureText = $relativeDeparture->format( "vor einer Stunde und %i Minuten" );
+						$departureText = $relativeDeparture->format( "vor 1:%I Stunde" );
 					}
 					else if( $secondsToDeparture <= -60 * 61 ) // an 1 hour and one minute ago
 					{
-						$departureText = "vor einer Stunde und einer Minute";
+						$departureText = "vor 1:01 Stunde";
 					}
 					else if( $secondsToDeparture <= -60 * 60 ) // an 1 hour ago
 					{
-						$departureText = "vor einer Stunde";
+						$departureText = "vor 1 Stunde";
 					}
 					else if( $secondsToDeparture <= -120 ) // less than 2 minutes ago
 					{
@@ -196,7 +195,7 @@ abstract class TransportUtil
 					}
 					else if( $secondsToDeparture <= -60 ) // less than a minute ago
 					{
-						$departureText = "vor einer Minute";
+						$departureText = "vor 1 Minute";
 					}
 					else if( $secondsToDeparture <= 60 ) // in less than 1 minute
 					{
@@ -204,7 +203,7 @@ abstract class TransportUtil
 					}
 					else if( $secondsToDeparture < 120 ) // in less than 2 minutes
 					{
-						$departureText = "in einer Minute";
+						$departureText = "in 1 Minute";
 					}
 					else if( $secondsToDeparture < 60 * 60 ) // in less than 1 hour
 					{
@@ -212,28 +211,28 @@ abstract class TransportUtil
 					}
 					else if( $secondsToDeparture < 60 * 61 ) // in 1 hour
 					{
-						$departureText = "in einer Stunde";
+						$departureText = "in 1 Stunde";
 					}
 					else if( $secondsToDeparture < 60 * 62 ) // in 1 hour and one minute
 					{
-						$departureText = "in einer Stunde und einer Minute";
+						$departureText = "in 1:01 Stunde";
 					}
 					else if( $secondsToDeparture <= 60 * 60 * 2 ) // in less than 2 hours
 					{
-						$departureText = $relativeDeparture->format( "in einer Stunde und %i Minuten" );
+						$departureText = $relativeDeparture->format( "in 1:%I Stunde" );
 					}
 					else // in more than 2 hours
-					{	
+					{
 						$departureText .= "um " . $departure->format( "H:i" ) . " Uhr";
 					}
 
 					if( !empty( $connection->from->prognosis->departure ) )
 					{
 						$newDeparture = new DateTime( $connection->from->prognosis->departure, $timezone );
-						$departureText .= " (+" . WorkflowUtil::formatTimeDiff( 
+						$departureText .= " (+" . WorkflowUtil::formatTimeDiff(
 								$newDeparture->diff( $departure ), " h", " min" ) . ")";
 					}
-					
+
 					if( $capacity )
 					{
 						$departureText .= "   ";
@@ -253,14 +252,14 @@ abstract class TransportUtil
 					{
 						$subtitle = "am " . $departure->format( "d.m.Y" );
 					}
-					
+
 					if( $connection->from->platform != null )
 					{
 						if( strlen( $subtitle ) > 0 )
 						{
 							$subtitle .= " ";
 						}
-						
+
 						$subtitle .= "ab Gleis ";
 
 						if( !empty( $connection->from->prognosis->platform ) )
@@ -276,15 +275,15 @@ abstract class TransportUtil
 					{
 						$subtitle .= ", ";
 					}
-					
+
 					$subtitle .= "an " . $arrival->format( "H:i" )." Uhr";
 					if( !empty( $connection->to->prognosis->arrival ) )
 					{
 						$newArrival = new DateTime( $connection->to->prognosis->arrival, $timezone );
-						$subtitle .= " (+" . WorkflowUtil::formatTimeDiff( 
+						$subtitle .= " (+" . WorkflowUtil::formatTimeDiff(
 								$newArrival->diff( $arrival ), " h", " min" ) . ")";
 					}
-					
+
 					$subtitle .= ", dauert " . WorkflowUtil::formatTimeDiff( $duration );
 
 					$subtitle .= ( $withFromInSubtext ? " von " . $connection->from->station->name : "" )
@@ -296,10 +295,10 @@ abstract class TransportUtil
 						$subtitle .= ", mit";
 						$sectionIndex = 0;
 						$total = count( $sections ) - 1;
-						
+
 						foreach( $sections as $section )
 						{
-							if( $section->journey->category )
+							if( $section->journey && $section->journey->category )
 							{
 								if( $sectionIndex > 0 )
 								{
@@ -310,9 +309,9 @@ abstract class TransportUtil
 									$subtitle .= " ";
 								}
 
-								if( array_key_exists( $section->journey->category, self::$badNames ) )
+								if( array_key_exists( $section->journey->category, self::$badnames ) )
 								{
-									$subtitle .= self::$badNames[ $section->journey->category ] 
+									$subtitle .= self::$badnames[ $section->journey->category ]
 											. " " . $section->journey->number;
 								}
 								else
@@ -333,23 +332,23 @@ abstract class TransportUtil
 					{
 						$subtitle .= ".";
 					}
-						
+
 					// if there are connections with the same departure time, increment the amount per site.
 					if( $lastDepartureTime == $connection->from->departure )
 					{
 						$perSite++;
 					}
 
-					$id = $connection->from->station->id . "-" . $connection->to->station->id . "-" . 
+					$id = $connection->from->station->id . "-" . $connection->to->station->id . "-" .
 							$connection->from->departure;
-					
-					$url = "/to/" . urlencode( $connection->to->station->name ) . 
-							"/from/" . urlencode( $connection->from->station->name ) . 
-							"/at/" . $nowFormatted . 
-							"?page=" . floor( $connectionIndex / $perSite ) . 
+
+					$url = "/to/" . urlencode( $connection->to->station->name ) .
+							"/from/" . urlencode( $connection->from->station->name ) .
+							"/at/" . urlencode( $date->format( "Y-m-d\TH:i" ) ) .
+							"?page=" . floor( $connectionIndex / $perSite ) .
 							"&c=" . ( ( $connectionIndex  % $perSite ) + 1 );
-					
-					$response->add( $id, $url, $departureText, $subtitle, 
+
+					$response->add( $id, $url, $departureText, $subtitle,
 							WorkflowUtil::getImage( "arrow.png" ) );
 
 					$connectionIndex++;
@@ -358,21 +357,21 @@ abstract class TransportUtil
 			}
 			else
 			{
-				$response->add( "nothing", "nothing", "Nichts gefunden ...", 
-						"Leider konnten keine Verbindungen gefunden werden.", 
+				$response->add( "nothing", "nothing", "Nichts gefunden ...",
+						"Leider konnten keine Verbindungen gefunden werden.",
 						WorkflowUtil::getImage( "icon.png" ) );
 			}
 		}
 		else
 		{
-			$response->add( "nothing", "nothing", "Für das braucht es keinen öffentlichen Verkehr ...", 
-					"Du kannst nicht denselben Ort für den Start und das Zeil verwenden.", 
+			$response->add( "nothing", "nothing", "Für das braucht es keinen öffentlichen Verkehr ...",
+					"Du kannst nicht denselben Ort für den Start und das Ziel verwenden.",
 					WorkflowUtil::getImage( "icon.png" ) );
 		}
 	}
-	
+
 	/**
-	 * Returns the class which has the user setted. If no class was setted it will return 2.
+	 * Returns the class which has the user setted. If no class was set it will return 2.
 	 * @return int the class. 1 or 2.
 	 */
 	public static function getClass()
@@ -383,10 +382,10 @@ abstract class TransportUtil
 		{
 			$class = 2;
 		}
-		
+
 		return $class;
 	}
-	
+
 	/**
 	 * @return string home station of the user from the config file or null if not setted.
 	 */
@@ -394,21 +393,21 @@ abstract class TransportUtil
 	{
 		return WorkflowUtil::getValue( "config", "home" );
 	}
-	
+
 	/**
 	 * @param string $query one station to check.
-	 * @return string the home station if the $query is equal to the 
+	 * @return string the home station if the $query is equal to the
 	 * self::$homeKeyword otherwise the given $query.
 	 */
 	public static function getStationForHome( $query )
 	{
 		$home = self::getHome();
-		
-		if( preg_match( "/" . self::$homeKeyword . "$/i", trim( $query ) ) && $home )
+
+		if( preg_match( "/" . self::KEYWORD_HOME . "$/i", trim( $query ) ) && $home )
 		{
 			return $home;
 		}
-		
+
 		return $query;
 	}
 }

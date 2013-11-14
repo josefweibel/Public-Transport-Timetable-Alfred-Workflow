@@ -1,2 +1,5 @@
 .DS_Store
 .jshintrc
+node_modules
+Gruntfile.js
+package.json

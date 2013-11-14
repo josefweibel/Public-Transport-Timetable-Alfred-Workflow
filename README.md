@@ -17,7 +17,7 @@ Get the next connections by typing the start and destination. The worklow will g
 When you set a start station by typing the following command ...
 
     fahrplan start Basel SBB
-	
+
 ... you can only type the destination into Alfred and get your connections.
 
     nach Biel ...
@@ -35,8 +35,7 @@ This workflow supports the [Alleyoop update workflow](http://www.alfredforum.com
 
 
 ## planned features
-* You will be able to add a departure or arrival date and time.
-* There will be a take-me-home function.
+* Internationalization
 
 ## data source
 This worklow uses the great [Opendata Transport API](http://transport.opendata.ch).

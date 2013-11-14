@@ -5,7 +5,7 @@ use DateTime;
 use DateTimeZone;
 use TimeKeywords\ITimeKeyword;
 
-require_once 'source/TimeKeywords/ITimeKeyword.php';
+require_once 'src/TimeKeywords/ITimeKeyword.php';
 
 /**
  * Default TimeKeyword. The time is the current time.
@@ -33,7 +33,14 @@ class NowTimeKeyword implements ITimeKeyword
 	public function removeTimeKeyword( $query )
 	{
 		$pos = strripos( $query, " " . $this->keyword );
-		return substr_replace( $query, "", $pos, strlen( $this->keyword ) + 1 );
+		if( $pos === false )
+		{
+			return $query;
+		}
+		else
+		{
+			return substr_replace( $query, "", $pos, strlen( $this->keyword ) + 1 );
+		}
 	}
 
 	/**
