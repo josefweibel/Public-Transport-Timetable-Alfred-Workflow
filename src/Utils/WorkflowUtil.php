@@ -41,6 +41,8 @@ abstract class WorkflowUtil
 		return $out;
 	}
 
+	private static $normalizeTable = null;
+
 	/**
 	 * Normalizes the given string. It removes the special characters like '^' or '¨' which Alfred gives specially.
 	 * @param someString string which should normalized.
@@ -48,7 +50,24 @@ abstract class WorkflowUtil
 	 */
 	public static function normalize( $someString )
 	{
-		return preg_replace( "/[^a-zA-Z0-9_ %\[\]\.\(\)%&-:]/s", "", $someString );
+		if( !self::$normalizeTable )
+		{
+			self::$normalizeTable = json_decode( '{
+				"\u0061\u0301": "á",	"\u0061\u0300": "à",	"\u0061\u0302": "â",	"\u0061\u0308": "ä",
+				"\u0065\u0301": "é",	"\u0065\u0300": "è",	"\u0065\u0302": "ê",	"\u0065\u0308": "ë",
+				"\u0069\u0301": "í",	"\u0069\u0300": "ì",	"\u0069\u0302": "î",	"\u0069\u0308": "ï",
+				"\u006F\u0301": "ó",	"\u006F\u0300": "ò",	"\u006F\u0302": "ô",	"\u006F\u0308": "ö",
+				"\u0075\u0301": "ú",	"\u0075\u0300": "ù",	"\u0075\u0302": "û",	"\u0075\u0308": "ü",
+				"\u0041\u0301": "Á",	"\u0041\u0300": "À",	"\u0041\u0302": "Â",	"\u0041\u0308": "Ä",
+				"\u0045\u0301": "É",	"\u0045\u0300": "È",	"\u0045\u0302": "Ê",	"\u0045\u0308": "Ë",
+				"\u0049\u0301": "Í",	"\u0049\u0300": "Ì",	"\u0049\u0302": "Î",	"\u0049\u0308": "Ï",
+				"\u004F\u0301": "Ó",	"\u004F\u0300": "Ò",	"\u004F\u0302": "Ô",	"\u004F\u0308": "Ö",
+				"\u0055\u0301": "Ú",	"\u0055\u0300": "Ù",	"\u0055\u0302": "Û",	"\u0055\u0308": "Ü"
+			}', true );
+		}
+
+		$pattern = "/[^a-zA-Z0-9_ %\[\]\.\(\)%&-:" . implode( "", self::$normalizeTable) . "]/s";
+		return preg_replace( $pattern, "", strtr( $someString, self::$normalizeTable ) );
 	}
 
 	/**

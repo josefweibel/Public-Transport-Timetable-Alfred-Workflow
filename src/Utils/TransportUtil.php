@@ -346,7 +346,7 @@ abstract class TransportUtil
 							"/from/" . urlencode( $connection->from->station->name ) .
 							"/at/" . urlencode( $date->format( "Y-m-d\TH:i" ) ) .
 							"?page=" . floor( $connectionIndex / $perSite ) .
-							"&c=" . ( ( $connectionIndex  % $perSite ) + 1 );
+							"&c=" . ( ( $connectionIndex	 % $perSite ) + 1 );
 
 					$response->add( $id, $url, $departureText, $subtitle,
 							WorkflowUtil::getImage( "arrow.png" ) );

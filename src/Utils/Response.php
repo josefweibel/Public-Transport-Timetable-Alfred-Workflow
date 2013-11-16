@@ -11,15 +11,15 @@ class Response
 {
 	/**
 	 * The array with all results. One result is one subarray which contains key-value-pairs.
-	 * @var array with arrays 
+	 * @var array with arrays
 	 */
 	private $results = array();
 
 	/**
 	 * Adds a new result to the response.
-	 * @param string $uid an unique id for this result. 
+	 * @param string $uid an unique id for this result.
 	 *		  Alfred sorts the result by amount of selection.
-	 * @param string $arg the value which will transmitted to the next 
+	 * @param string $arg the value which will transmitted to the next
 	 *		  item in this workflow if the user selects this result.
 	 * @param string $title the great title
 	 * @param string $sub the little subtitle.

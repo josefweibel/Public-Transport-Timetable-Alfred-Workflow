@@ -11,7 +11,6 @@ require_once 'src/TimeKeywords/TodayTimeKeyword.php';
  */
 class AtTimeKeyword extends TodayTimeKeyword
 {
-    
 	/**
 	 * Sets the keyword 'um'.
 	 */

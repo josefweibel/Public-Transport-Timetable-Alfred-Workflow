@@ -13,7 +13,7 @@ interface ITimeKeyword
 	 * @return string a valid regular expression
 	 */
 	public function getPattern();
-	
+
 	/**
 	 * Removes all data from the query which belongs to the time keyword.
 	 * @param string $query the query with the time keyword.

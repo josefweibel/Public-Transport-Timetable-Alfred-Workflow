@@ -7,6 +7,7 @@ use TimeKeywords\AtTimeKeyword;
 use TimeKeywords\TomorrowTimeKeyword;
 use TimeKeywords\AtDayTimeKeyword;
 use TimeKeywords\WeekdayTimeKeyword;
+use TimeKeywords\DayAfterTomorrowTimeKeyword;
 
 require_once 'src/TimeKeywords/NowTimeKeyword.php';
 require_once 'src/TimeKeywords/TodayTimeKeyword.php';
@@ -14,6 +15,7 @@ require_once 'src/TimeKeywords/AtTimeKeyword.php';
 require_once 'src/TimeKeywords/TomorrowTimeKeyword.php';
 require_once 'src/TimeKeywords/AtDayTimeKeyword.php';
 require_once 'src/TimeKeywords/WeekdayTimeKeyword.php';
+require_once 'src/TimeKeywords/DayAfterTomorrowTimeKeyword.php';
 
 /**
  * Manages all @link ITimeKeyword (you don't say ...).
@@ -42,6 +44,7 @@ class TimeKeywordManager
 			self::$keywords[] = new TodayTimeKeyword();
 			self::$keywords[] = new AtTimeKeyword();
 			self::$keywords[] = new AtDayTimeKeyword();
+			self::$keywords[] = new DayAfterTomorrowTimeKeyword();
 
 			foreach( array_keys( WeekdayTimeKeyword::$weekdays ) as $foreignLanguage )
 			{
