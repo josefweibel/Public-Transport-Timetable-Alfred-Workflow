@@ -230,7 +230,7 @@ abstract class TransportUtil
 					{
 						$newDeparture = new DateTime( $connection->from->prognosis->departure, $timezone );
 						$departureText .= " (+" . WorkflowUtil::formatTimeDiff(
-								$newDeparture->diff( $departure ), " h", " min" ) . ")";
+								$newDeparture->diff( $departure ), " Stunden", " Stunde", " Minuten" ) . ")";
 					}
 
 					if( $capacity )
@@ -268,7 +268,6 @@ abstract class TransportUtil
 						}
 
 						$subtitle .= $connection->from->platform;
-
 					}
 
 					if( strlen( $subtitle ) > 0 )
@@ -281,7 +280,7 @@ abstract class TransportUtil
 					{
 						$newArrival = new DateTime( $connection->to->prognosis->arrival, $timezone );
 						$subtitle .= " (+" . WorkflowUtil::formatTimeDiff(
-								$newArrival->diff( $arrival ), " h", " min" ) . ")";
+								$newArrival->diff( $arrival ), "h", "h", "min" ) . ")";
 					}
 
 					$subtitle .= ", dauert " . WorkflowUtil::formatTimeDiff( $duration );
