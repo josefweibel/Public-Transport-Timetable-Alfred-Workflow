@@ -456,17 +456,28 @@ echo "Die {query}. Klasse wurde als Standard festgelegt.";</string>
 	<string>Fahrplan Alfred Workflow
 
 Befehle:
--	von [Startbahnhof] nach [Zielbahnhof] …
-	Sucht die nächsten Verbindungen vom Start- zum Zielbahnhof. Für die Bahnhöfe werden Vorschläge angeboten.
+-	von [Startbahnhof] nach [Zielbahnhof] [Abfahrtszeit]
+	Sucht die nächsten Verbindungen vom Start- zum Zielbahnhof. Für die Bahnhöfe werden Vorschläge angeboten. Wenn [Zielbahnhof] gleich “Hause” ist, werden die nächsten Verbindungen zum Heimbahnhof abgefragt.
 
--	nach [Zielbahnhof] …
+-	nach [Zielbahnhof] [Abfahrtszeit]
 	Wenn ein Standard-Startbahnhof angegeben wurde, muss für eine Verbindung ab diesem lediglich noch der Zielbahnhof eingegeben werden, für welchen es auch Vorschläge gibt.
+
+-	zurück [Startbahnhof] [Abfahrtszeit]
+	Alternative zu “von [Startbahnhof] nach Hause [Abfahrtszeit]”. Gibt die nächsten Verbindungen zum Heimbahnhof zurück.
 
 -	fahrplan start [Startbahnhof]
 	Mit diesem Befehl kann ein Standard-Startbahnhof festgelegt werden. Beispielsweise die Busstation vor dem Haus. So können noch schneller Verbindungen gefunden werden.
 
 -	fahrplan klasse
 	Damit bei der Auslastungsanzeige bei den Verbindungen die Klasse berücksichtigt werden kann, welche auch gefahren wird, kann man mit diesem Befehl zwischen die 1. und 2. wählen.
+
+Mögliche Abfahrtszeiten:
+- jetzt
+- um hh:mm
+- morgen hh:mm
+- übermorgen hh:mm
+- Montag-Sonntag hh:mm
+- dd.mm.yyyy hh:mm
 
 Updates können über den Alleyoop-Workflow verwaltet werden.
 Daten von der Opendata Transport API (transport.opendata.ch).
@@ -477,7 +488,7 @@ Mail:		alfred@josefweibel.ch
 Twitter:		@josefweibel
 
 Das Projekt befindet sich auch auf GitHub: 
-https://github.com/josefweibel/Public-Transport-Timetable---Alfred-Workflow</string>
+https://github.com/josefweibel/Public-Transport-Timetable-Alfred-Workflow</string>
 	<key>uidata</key>
 	<dict>
 		<key>0D355389-0F73-4CF4-93F3-27AD8EEC4179</key>
