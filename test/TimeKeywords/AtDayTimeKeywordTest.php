@@ -21,7 +21,6 @@ class AtDayTimeKeywordTest extends PHPUnit_Framework_TestCase
 
 	public function testMatches()
 	{
-		var_dump( $this->keyword->getPattern() );
 		$this->assertEquals( 1, preg_match( $this->keyword->getPattern(), "von Zürich HB nach Bern 18.12.2013 12:53" ) );
 		$this->assertEquals( 1, preg_match( $this->keyword->getPattern(), "nach Basel 13.11.2010 3:45" ) );
 
