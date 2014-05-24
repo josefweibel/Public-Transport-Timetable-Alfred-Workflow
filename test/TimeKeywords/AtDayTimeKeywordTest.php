@@ -81,10 +81,13 @@ class AtDayTimeKeywordTest extends PHPUnit_Framework_TestCase
 
 	public function testTimeGetter()
 	{
+		date_default_timezone_set("UTC");
+		$currentYear = date( "Y" );
+
 		$this->assertEquals( new DateTime( "18.12.2013 12:53:00", $this->timezone ),
 				$this->keyword->getTime( "von Zürich HB nach Bern am 18.12.2013 um 12:53" ) );
 
-		$this->assertEquals( new DateTime( "11.10.2013 01:32:00", $this->timezone ),
+		$this->assertEquals( new DateTime( "11.10.".$currentYear." 01:32:00", $this->timezone ),
 				$this->keyword->getTime( "nach Basel 11. Oktober 1:32" ) );
 
 		$this->assertEquals( new DateTime( "01.01.2014 01:01:00", $this->timezone ),
@@ -93,10 +96,10 @@ class AtDayTimeKeywordTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals( new DateTime( "02.06.2009 23:59:00", $this->timezone ),
 				$this->keyword->getTime( "nach Berlin 2. Juni 2009 um 23:59" ) );
 
-		$this->assertEquals( new DateTime( "15.03.2013 11:20:00", $this->timezone ),
+		$this->assertEquals( new DateTime( "15.03.".$currentYear." 11:20:00", $this->timezone ),
 				$this->keyword->getTime( "nach Berlin 15.03. um 11:20" ) );
 
-		$this->assertEquals( new DateTime( "05.01.2013 13:37:00", $this->timezone ),
+		$this->assertEquals( new DateTime( "05.01.".$currentYear." 13:37:00", $this->timezone ),
 				$this->keyword->getTime( "nach Berlin am 05.01. um 13:37" ) );
 
 		$this->assertEquals( new DateTime( "06.09.2018 13:37:00", $this->timezone ),
@@ -105,13 +108,13 @@ class AtDayTimeKeywordTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals( new DateTime( "23.04.2000 09:12:00", $this->timezone ),
 				$this->keyword->getTime( "nach Berlin am 23. April 2000 9:12" ) );
 
-		$this->assertEquals( new DateTime( "11.11.2013 11:11:00", $this->timezone ),
+		$this->assertEquals( new DateTime( "11.11.".$currentYear." 11:11:00", $this->timezone ),
 				$this->keyword->getTime( "nach Basel 11.11. 11:11" ) );
 
 		$this->assertEquals( new DateTime( "01.07.2013 02:11:00", $this->timezone ),
 				$this->keyword->getTime( "von Dietikon nach Genf 1. Juli 13 02:11" ) );
 
-		$this->assertEquals( new DateTime( "01.12.2013 19:00:00", $this->timezone ),
+		$this->assertEquals( new DateTime( "01.12.".$currentYear." 19:00:00", $this->timezone ),
 				$this->keyword->getTime( "von Bern nach Dietikon am 1. Dezember um 19:00" ) );
 	}
 
