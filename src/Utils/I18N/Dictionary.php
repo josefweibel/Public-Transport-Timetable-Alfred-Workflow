@@ -3,6 +3,7 @@ namespace Utils\I18N;
 
 /**
  * Contains translations.
+ * Dictionaries are hierarchically because they can have fallback dictionaries.
  *
  * Usage:
  * 	$dictionary.get( "timekeywords.today" ); // returns the translation "today" in the group "timekeywords"
@@ -28,21 +29,38 @@ class Dictionary
 	const PARAM_END = "}";
 
 	/**
+	 * The locale string of this dictionary.
+	 */
+	private $locale;
+
+	/**
 	 * Multidimensional array with key-value-pairs.
 	 */
 	private $translations;
 
 	/**
-	 * Creates a new instance of a dictionary with the given translations.
-	 * @param $translations may not be null.
+	 * The dictionary in which we will search the translation if we can't find it in this dictionary.
+	 * Can be null.
 	 */
-	public function __construct( $translations )
+	private $fallbackDictionary;
+
+	/**
+	 * Creates a new instance of a dictionary with the given translations.
+	 * @param $locale the locale of this new dictionary
+	 * @param $translations may not be null.
+	 * @param $fallbackDictionary may be null.
+	 */
+	public function __construct( $locale, $translations, $fallbackDictionary )
 	{
+		$this->locale = $locale;
 		$this->translations = $translations;
+		$this->fallbackDictionary = $fallbackDictionary;
 	}
 
 	/**
 	 * Gets the translation for the key and replaces placeholders with the given values.
+	 * If there isn't a translation in this dictionary, it will check its fallback dictionaries.
+	 *
 	 * @param $key the translation which should be returned. Can be dot-separated if you use groups in your dictionary.
 	 * @param $params (optional) key-value-pairs to replace placeholders in the dictionary. Placeholders are wrapped with '{' and '}'.
 	 * @return the translation or null if it wasn't found.
@@ -57,17 +75,24 @@ class Dictionary
 			$translation = $translation[ $k ];
 		}
 
-		if( $translation && $params )
+		if( $translation )
 		{
-			$replace_pairs = array();
-
-			// wrap placeholders with '{' and '}'.
-			foreach( $params as $search => $replace )
+			if( $params )
 			{
-				$replace_pairs[ self::PARAM_START . $search . self::PARAM_END ] = $replace;
-			}
+				$replace_pairs = array();
 
-			$translation = strtr( $translation, $replace_pairs );
+				// wrap placeholders with '{' and '}'.
+				foreach( $params as $search => $replace )
+				{
+					$replace_pairs[ self::PARAM_START . $search . self::PARAM_END ] = $replace;
+				}
+
+				$translation = strtr( $translation, $replace_pairs );
+			}
+		}
+		else if( $this->fallbackDictionary )
+		{
+			$translation = $this->fallbackDictionary->get( $key, $params );
 		}
 
 		return $translation;

@@ -57,7 +57,7 @@ abstract class I18NUtil
 	}
 
 	/**
-	 * Caches the dictionary after the first call.
+	 * Builds the dictionaries hierarchically and caches they after the first call.
 	 * @return the dictionary with the user locale (or only language) or the fallback locale.
 	 */
 	public static function getDictionary()
@@ -66,22 +66,24 @@ abstract class I18NUtil
 		{
 			$locale = self::getLocale();
 
-			// try with full locale: eg. i18n/de_CH.ini
-			$file = self::DICTIONARY_FILEPATH . $locale . self::DICTIONARY_EXTENSION;
+			// last fallback: English: i18n/en.ini
+			$file = self::DICTIONARY_FILEPATH . self::DICTIONARY_DEFAULT . self::DICTIONARY_EXTENSION;
+			self::$dictionary = new Dictionary( self::DICTIONARY_DEFAULT, parse_ini_file( $file, true ), null );
 
-			if( !file_exists( $file ) )
+			// try with language only: eg. i18n/de.ini
+			$languageLocale = substr( $locale, 0, stripos( $locale, "_" ) );
+			$file = self::DICTIONARY_FILEPATH . $languageLocale . self::DICTIONARY_EXTENSION;
+			if( file_exists( $file ) )
 			{
-				// try with language: eg. i18n/de.ini
-				$file = self::DICTIONARY_FILEPATH . substr( $locale, 0, stripos( $locale, "_" ) ) . self::DICTIONARY_EXTENSION;
-
-				if( !file_exists( $file ) )
-				{
-					// fallback to English: i18n/en.ini
-					$file = self::DICTIONARY_FILEPATH . DICTIONARY_DEFAULT . self::DICTIONARY_EXTENSION;
-				}
+				self::$dictionary = new Dictionary( $languageLocale, parse_ini_file( $file, true ), self::$dictionary );
 			}
 
-			self::$dictionary = new Dictionary( parse_ini_file( $file, true ) );
+			// try with full locale: eg. i18n/de_CH.ini
+			$file = self::DICTIONARY_FILEPATH . $locale . self::DICTIONARY_EXTENSION;
+			if( file_exists( $file ) )
+			{
+				self::$dictionary = new Dictionary( $locale, parse_ini_file( $file, true ), self::$dictionary );
+			}
 		}
 
 		return self::$dictionary;
