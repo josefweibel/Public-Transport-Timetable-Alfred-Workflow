@@ -2,21 +2,24 @@
 
 use Utils\Response;
 use Utils\WorkflowUtil;
+use Utils\I18N\I18NUtil;
 
 require_once 'src/Utils/Response.php';
 require_once 'src/Utils/WorkflowUtil.php';
+require_once 'src/Utils/I18N/I18NUtil.php';
 
 /**
  * @author Josef Weibel <a href="http://www.josefweibel.ch">www.josefweibel.ch</a>
  */
 
+$dictionary = I18NUtil::getDictionary();
 $response = new Response();
-$response->add( "second", "2", "2. Klasse",
-		"Auswählen um die 2. Klasse als Standard zu verwenden.",
-		WorkflowUtil::getImage( "icon.png" ) );
 
-$response->add( "first", "1", "1. Klasse",
-		"Auswählen um die 1. Klasse als Standard zu verwenden.",
+foreach( array( 2, 1 ) as $class )
+{
+	$response->add( $class, $class, $dictionary->get( "classselector.title", array( "class" => $class ) ),
+		$dictionary->get( "classselector.subtitle", array( "class" => $class ) ),
 		WorkflowUtil::getImage( "icon.png" ) );
+}
 
 echo $response->export();
