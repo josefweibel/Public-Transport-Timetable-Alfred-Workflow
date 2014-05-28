@@ -1,11 +1,11 @@
 <?php
 namespace TimeKeywords;
 
+include( "src/Initializer.php" );
+
 use DateTime;
 use DateTimeZone;
 use TimeKeywords\ITimeKeyword;
-
-require_once 'src/TimeKeywords/ITimeKeyword.php';
 
 /**
  * Default TimeKeyword. The time is the current time.
@@ -14,7 +14,7 @@ require_once 'src/TimeKeywords/ITimeKeyword.php';
 class NowTimeKeyword implements ITimeKeyword
 {
 	/**
-	 * @var string the keyword of this TimeKeyword. 
+	 * @var string the keyword of this TimeKeyword.
 	 */
 	protected $keyword = "jetzt";
 
@@ -25,7 +25,7 @@ class NowTimeKeyword implements ITimeKeyword
 	{
 		return "/ " . $this->keyword . "$/";
 	}
-	
+
 	/**
 	 * @param string $query
 	 * @return string the query without the keyword at the end.

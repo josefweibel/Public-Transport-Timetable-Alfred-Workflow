@@ -1,6 +1,8 @@
 <?php
 namespace TimeKeywords;
 
+include( "src/Initializer.php" );
+
 /**
  * Interface for all TimeKeywords which will could used in queries.
  * Please register your TimeKeyword in the TimeKeywordManager.

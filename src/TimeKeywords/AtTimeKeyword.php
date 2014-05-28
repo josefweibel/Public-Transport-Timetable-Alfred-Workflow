@@ -1,9 +1,9 @@
 <?php
 namespace TimeKeywords;
 
-use TimeKeywords\TodayTimeKeyword;
+include( "src/Initializer.php" );
 
-require_once 'src/TimeKeywords/TodayTimeKeyword.php';
+use TimeKeywords\TodayTimeKeyword;
 
 /**
  * The same as @link TodayTimeKeyword but with the keyword 'um'.

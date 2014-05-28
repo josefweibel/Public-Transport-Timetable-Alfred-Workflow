@@ -1,9 +1,9 @@
 <?php
 namespace TimeKeywords;
 
-use TimeKeywords\AHourMinuteTimeKeyword;
+include( "src/Initializer.php" );
 
-require_once 'src/TimeKeywords/AHourMinuteTimeKeyword.php';
+use TimeKeywords\AHourMinuteTimeKeyword;
 
 /**
  * @author Josef Weibel <a href="http://www.josefweibel.ch">www.josefweibel.ch</a>

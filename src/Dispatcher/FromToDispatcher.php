@@ -1,14 +1,12 @@
 <?php
+namespace Dispatcher;
+
+include( "src/Initializer.php" );
 
 use Utils\Response;
 use TimeKeywords\TimeKeywordManager;
 use Utils\TransportUtil;
 use Utils\WorkflowUtil;
-
-require_once 'src/Utils/Response.php';
-require_once 'src/TimeKeywords/TimeKeywordManager.php';
-require_once 'src/Utils/TransportUtil.php';
-require_once 'src/Utils/WorkflowUtil.php';
 
 /**
  * Handles the from-to-action. This script will give suggestions for the stations and if there are three points " ..." at the end of the query, it will return the requested connections.

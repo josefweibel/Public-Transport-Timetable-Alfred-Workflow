@@ -1,6 +1,8 @@
 <?php
 namespace Utils\I18N;
 
+include( "src/Initializer.php" );
+
 /**
  * Contains translations.
  * Dictionaries are hierarchically because they can have fallback dictionaries.

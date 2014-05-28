@@ -1,6 +1,8 @@
 <?php
 namespace Utils;
 
+include( "src/Initializer.php" );
+
 use \SimpleXMLElement;
 
 /**

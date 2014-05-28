@@ -1,12 +1,12 @@
 <?php
 namespace TimeKeywords;
 
+include( "src/Initializer.php" );
+
 use BadFunctionCallException;
 use DateTime;
 use DateTimeZone;
 use TimeKeywords\ITimeKeyword;
-
-require_once 'src/TimeKeywords/ITimeKeyword.php';
 
 /**
  * An abstract class which can used for TimeKeywords with the following pattern: [keyword] [hour]:[minute]

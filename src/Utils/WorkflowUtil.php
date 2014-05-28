@@ -1,6 +1,8 @@
 <?php
 namespace Utils;
 
+include( "src/Initializer.php" );
+
 /**
  * A very usefull and beautiful class which helps the workflow developer to create wonderfull workflows.
  * All methods have to be static.

@@ -1,11 +1,11 @@
 <?php
 namespace TimeKeywords;
 
+include( "src/Initializer.php" );
+
 use \DateTime;
 use \DateTimeZone;
 use TimeKeywords\AAtHourMinuteTimeKeyword;
-
-require_once 'src/TimeKeywords/AAtHourMinuteTimeKeyword.php';
 
 /**
  * @author Josef Weibel <a href="http://www.josefweibel.ch">www.josefweibel.ch</a>

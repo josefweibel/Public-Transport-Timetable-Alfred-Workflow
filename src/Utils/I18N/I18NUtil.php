@@ -1,7 +1,7 @@
 <?php
 namespace Utils\I18N;
 
-require_once 'src/Utils/I18N/Dictionary.php';
+include( "src/Initializer.php" );
 
 /**
  * Utility for doing internationalization stuff.
