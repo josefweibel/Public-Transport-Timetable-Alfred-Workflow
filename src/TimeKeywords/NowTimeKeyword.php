@@ -52,4 +52,12 @@ class NowTimeKeyword implements ITimeKeyword
 		$timezone = new DateTimeZone( "Europe/Zurich" );
 		return new DateTime( "now", $timezone );
 	}
+
+	/**
+	 * @return the translated keyword.
+	 */
+	public function getKeyword()
+	{
+		return $this->keyword;
+	}
 }

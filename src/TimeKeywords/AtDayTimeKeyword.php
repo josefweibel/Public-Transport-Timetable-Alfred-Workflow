@@ -34,7 +34,7 @@ class AtDayTimeKeyword extends AAtHourMinuteTimeKeyword
 	{
 		$currentDate = new DateTime( null, new DateTimeZone( "Europe/Zurich" ) );
 
-		$matches = array(); //"/" . $this->keyword . "/i"
+		$matches = array();
 		preg_match( $this->getPattern(), $query, $matches );
 
 		$date	 = ( $matches[5] ? ( strlen( $matches[5] ) == 2 ? "20" . $matches[5] : $matches[5] ) : $currentDate->format( "Y" ) ) . "-";

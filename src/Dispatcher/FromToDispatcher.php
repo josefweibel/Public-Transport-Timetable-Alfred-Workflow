@@ -58,10 +58,10 @@ else
 		else
 		{
 			TransportUtil::addHomeLocation( $response, $to, true, $fromHuman . " nach ",
-					" " . TransportUtil::KEYWORD_NOW );
+					" " . TimeKeywordManager::getDefaultTimeKeyword() );
 			TransportUtil::addLocations( $response, $to, $from,
 					"Verbindungen von " . $from . " nach ", " anzeigen.", true,
-					$fromHuman . " nach ", " " . TransportUtil::KEYWORD_NOW );
+					$fromHuman . " nach ", " " . TimeKeywordManager::getDefaultTimeKeyword() );
 		}
 	}
 	else

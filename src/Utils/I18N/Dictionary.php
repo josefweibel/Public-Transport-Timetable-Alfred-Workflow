@@ -67,7 +67,7 @@ class Dictionary
 	 * @param $params (optional) key-value-pairs to replace placeholders in the dictionary. Placeholders are wrapped with '{' and '}'.
 	 * @return the translation or null if it wasn't found.
 	 */
-	public function get( $key, $params )
+	public function get( $key, $params = null )
 	{
 		$keys = explode( self::GROUP_SEPARATOR, $key );
 

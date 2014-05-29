@@ -7,6 +7,7 @@ use DateTime;
 use DateTimeZone;
 use Utils\Response;
 use Utils\WorkflowUtil;
+use Utils\I18N\I18NUtil;
 
 /**
  * Has methods to get data from the Transport API and saves the results readable as Alfred results to an response.
@@ -16,14 +17,9 @@ use Utils\WorkflowUtil;
 abstract class TransportUtil
 {
 	/**
-	 * @var string default TimeKeyword
+	 * @var string translation key for the take me home keyword.
 	 */
-	const KEYWORD_NOW = "jetzt";
-
-	/**
-	 * @var string keyword for take me home.
-	 */
-	const KEYWORD_HOME = "Hause";
+	const KEYWORD_HOME = "keywords.home";
 
 	/**
 	 * @var string url to get locations.
@@ -116,12 +112,15 @@ abstract class TransportUtil
 	 */
 	public static function addHomeLocation( &$response, $query, $isOk, $okPrefix, $okSuffix )
 	{
-		if( strpos( self::KEYWORD_HOME, $query ) !== false )
+		$dictionary = I18NUtil::getDictionary();
+		$keyword = $dictionary->get( self::KEYWORD_HOME );
+
+		if( strpos( $keyword, $query ) !== false )
 		{
-			$response->add( self::KEYWORD_HOME, self::KEYWORD_HOME, self::KEYWORD_HOME,
-					"Die nächsten Verbindungen zu dir nach Hause anzeigen.",
+			$response->add( $keyword, $keyword, $keyword,
+					$dictionary->get( self::KEYWORD_HOME . "subtitle" ),
 					WorkflowUtil::getImage( "station.png" ), !$isOk ? "yes" : "no",
-					$okPrefix.self::KEYWORD_HOME.$okSuffix );
+					$okPrefix.$keyword.$okSuffix );
 		}
 	}
 
@@ -404,7 +403,10 @@ abstract class TransportUtil
 	{
 		$home = self::getHome();
 
-		if( preg_match( "/" . self::KEYWORD_HOME . "$/i", trim( $query ) ) && $home )
+		$dictionary = I18NUtil::getDictionary();
+		$keyword = $dictionary->get( self::KEYWORD_HOME );
+
+		if( preg_match( "/" . $keyword . "$/i", trim( $query ) ) && $home )
 		{
 			return $home;
 		}

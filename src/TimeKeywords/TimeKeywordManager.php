@@ -69,4 +69,13 @@ class TimeKeywordManager
 
 		return null;
 	}
+
+	/**
+	 * @return the keyword which can be appended to the query.
+	 */
+	public static function getDefaultTimeKeyword()
+	{
+		$keyword = new NowTimeKeyword();
+		return $keyword->getKeyword();
+	}
 }

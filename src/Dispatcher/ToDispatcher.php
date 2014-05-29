@@ -44,13 +44,13 @@ else if( $isTo )
 {
 	TransportUtil::addLocations( $response, $query, $normHome,
 			"Verbindungen von " . $home . " nach ", " anzeigen.",
-			true, "", " " . TransportUtil::KEYWORD_NOW );
+			true, "", " " . TimeKeywordManager::getDefaultTimeKeyword() );
 }
 else
 {
 	TransportUtil::addLocations( $response, $query, $normHome,
 			"Verbindungen von ", " nach " . $home . " anzeigen.",
-			true, "", " " . TransportUtil::KEYWORD_NOW );
+			true, "", " " . TimeKeywordManager::getDefaultTimeKeyword() );
 }
 
 echo $response->export();
