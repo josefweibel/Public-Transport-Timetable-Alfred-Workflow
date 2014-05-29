@@ -1,6 +1,11 @@
 <?php
 
-function __autoload( $class )
+if( !function_exists( "autoloader" ) )
 {
-    require_once( realpath( dirname( __FILE__ ) ) . '/' . str_replace( '\\', '/', $class ) . '.php' );
+	function autoloader( $class )
+	{
+	    require_once( realpath( dirname( __FILE__ ) ) . '/' . str_replace( '\\', '/', $class ) . '.php' );
+	}
+
+	spl_autoload_register( "autoloader" );
 }
