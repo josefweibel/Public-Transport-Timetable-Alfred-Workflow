@@ -53,7 +53,7 @@ abstract class AHourMinuteTimeKeyword implements ITimeKeyword
 
 	protected function getDateTimeFromQuery( $query, $date )
 	{
-		$datetime = new DateTime( $date, new DateTimeZone( "Europe/Zurich" ) );
+		$datetime = new DateTime( $date, new DateTimeZone( "Europe/Zurich" ) ); // TODO use right timezone.
 
 		$results = array();
 		preg_match( "/" . self::getTimePattern() . "$/i", $query, $results );

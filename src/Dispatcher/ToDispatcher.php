@@ -7,6 +7,7 @@ use Utils\Response;
 use TimeKeywords\TimeKeywordManager;
 use Utils\TransportUtil;
 use Utils\WorkflowUtil;
+use Utils\I18N\I18NUtil;
 
 /**
  * Handles the take-me-home- and the to-action.
@@ -17,6 +18,7 @@ use Utils\WorkflowUtil;
  */
 
 $response = new Response();
+$dictionary = I18NUtil::getDictionary();
 
 $query = WorkflowUtil::normalize( trim( $argv[1] ) );
 $isTo = $argv[2];
@@ -28,10 +30,8 @@ $timeKeyword = TimeKeywordManager::getTimeKeyword( $query );
 
 if( empty( $home ) )
 {
-	$response->add( "nothing", "nothing", "Du hast noch keine Heimstation festgelegt.",
-			"Ändere das, indem du 'fahrplan set' in Alfred tippst. " .
-			"Alternativ kannst du auch mit 'von' eine Suche mit Startstation machen.",
-			WorkflowUtil::getImage( "icon.png" ) );
+	$response->add( "nothing", "nothing", $dictionary->get( "errors.nohomestation-title" ),
+			$dictionary->get( "errors.nohomestation-subtitle" ), WorkflowUtil::getImage( "icon.png" ) );
 }
 else if( $timeKeyword )
 {
@@ -40,16 +40,10 @@ else if( $timeKeyword )
 			$isTo ? $station : $normHome, $timeKeyword->getTime( $query ),
 			!$isTo, $isTo );
 }
-else if( $isTo )
-{
-	TransportUtil::addLocations( $response, $query, $normHome,
-			"Verbindungen von " . $home . " nach ", " anzeigen.",
-			true, "", " " . TimeKeywordManager::getDefaultTimeKeyword() );
-}
 else
 {
 	TransportUtil::addLocations( $response, $query, $normHome,
-			"Verbindungen von ", " nach " . $home . " anzeigen.",
+			$isTo ? "to.to-subtitle" : "to.from-subtitle", array( "home" => $home ),
 			true, "", " " . TimeKeywordManager::getDefaultTimeKeyword() );
 }
 

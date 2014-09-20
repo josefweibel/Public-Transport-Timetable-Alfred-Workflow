@@ -7,6 +7,7 @@ use Utils\Response;
 use TimeKeywords\TimeKeywordManager;
 use Utils\TransportUtil;
 use Utils\WorkflowUtil;
+use Utils\I18N\I18NUtil;
 
 /**
  * Handles the from-to-action. This script will give suggestions for the stations and if there are three points " ..." at the end of the query, it will return the requested connections.
@@ -16,6 +17,7 @@ use Utils\WorkflowUtil;
  */
 
 $response = new Response();
+$dictionary = I18NUtil::getDictionary();
 $query = WorkflowUtil::normalize( $argv[1] );
 
 $fromEnd = strripos( $query, " nach " );
@@ -24,13 +26,12 @@ if( $fromEnd === false )
 	$from = trim( $query );
 	if( empty( $from ) )
 	{
-		$response->add( "nothing", "nothing", "Wo bist du?", "Einfach mit tippen beginnen ...",
-				WorkflowUtil::getImage( "icon.png" ) );
+		$response->add( "nothing", "nothing", $dictionary->get( "fromto.nofrom-title" ),
+					$dictionary->get( "fromto.nofrom-subtitle" ), WorkflowUtil::getImage( "icon.png" ), 'no' );
 	}
 	else
 	{
-		TransportUtil::addLocations( $response, $from, "", "", " als Abfahrtsort verwenden.",
-				true, "", " nach " );
+		TransportUtil::addLocations( $response, $from, "", "fromto.departure-subtitle", null, true, "", " nach " );
 	}
 }
 else
@@ -51,16 +52,15 @@ else
 	{
 		if( empty( $to ) )
 		{
-			$response->add( "nothing", "nothing", "Wo willst du hin?",
-					"Du bist nicht mehr weit von deinen Verbindungen entfernt.",
-					WorkflowUtil::getImage( "icon.png" ) );
+			$response->add( "nothing", "nothing", $dictionary->get( "fromto.noto-title" ),
+					$dictionary->get( "fromto.noto-subtitle" ), WorkflowUtil::getImage( "icon.png" ), 'no' );
 		}
 		else
 		{
 			TransportUtil::addHomeLocation( $response, $to, true, $fromHuman . " nach ",
 					" " . TimeKeywordManager::getDefaultTimeKeyword() );
 			TransportUtil::addLocations( $response, $to, $from,
-					"Verbindungen von " . $from . " nach ", " anzeigen.", true,
+					"fromto.arrival-subtitle", array( "start" => $from ), true,
 					$fromHuman . " nach ", " " . TimeKeywordManager::getDefaultTimeKeyword() );
 		}
 	}

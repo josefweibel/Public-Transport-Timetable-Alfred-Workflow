@@ -24,34 +24,41 @@ abstract class TransportUtil
 	/**
 	 * @var string url to get locations.
 	 */
-	const URL_LOCATIONS = "http://transport.opendata.ch/v1/locations?";
+	const URL_LOCATIONS = "http://transport.opendata.ch/v1/locations";
 
 	/**
 	 * @var string url to get connections.
 	 */
-	const URL_CONNECTIONS = "http://transport.opendata.ch/v1/connections?";
+	const URL_CONNECTIONS = "http://transport.opendata.ch/v1/connections";
 
 	/**
 	 * @var array of transport shortcuts which are complicated to understand.
-	 * complicated shortcut => nice shortcut
+	 * complicated shortcut => nice shortcut translation key (prefix it with 'badnames.')
 	 */
-	public static $badnames = array( "T" => "Tram", "B" => "Bus", "NFB" => "NF Bus", "NFT" => "NF Tram" );
+	public static $badnames = array( "T" => "tram", "B" => "bus", "NFB" => "nfb", "NFT" => "nft" );
+
+	/**
+	 * @var array of service categories in which is it helpful to show the linenumber too.
+	 */
+	public static $categoriesWithNumber = array( "S", "SN", "T", "B", "NFB", "NFT" );
 
 	/**
 	 * Adds locations from the Transport API to the given response.
 	 * @param Response $response
 	 * @param String $query search text
 	 * @param String $exclude (optional)
-	 * @param String $titlePrefix
-	 * @param String $titleSuffix
+	 * @param String $subtitle placeholder for the station is 'station'
+	 * @param array $subtitleParams additional params for getting the translation from the dictionary
 	 * @param boolean $isOk
 	 * @param String $okPrefix (optional)
 	 * @param String $okSuffix (optional)
 	 * @param int $max (optional, default = 10)
 	 */
-	public static function addLocations( &$response, $query, $exclude, $titlePrefix,
-			$titleSuffix, $isOk = false, $okPrefix = null, $okSuffix = null, $max = 10 )
+	public static function addLocations( &$response, $query, $exclude, $subtitle, $subtitleParams = null,
+			$isOk = false, $okPrefix = null, $okSuffix = null, $max = 10 )
 	{
+		$dictionary = I18NUtil::getDictionary();
+
 		// if the query is equal to the excluded name, add a comma to
 		// get stations of the city in the query.
 		if( strtolower( $query ) == strtolower( $exclude ) )
@@ -62,7 +69,7 @@ abstract class TransportUtil
 		$params = array( "query" => $query );
 
 		// get the results
-		$json = WorkflowUtil::request( self::URL_LOCATIONS . http_build_query( $params ) );
+		$json = WorkflowUtil::request( self::URL_LOCATIONS . "?" . http_build_query( $params ) );
 		$result = json_decode( $json );
 		$stations = $result->stations;
 
@@ -78,17 +85,24 @@ abstract class TransportUtil
 
 				if( strtolower( $station->name ) != strtolower( $exclude ) )
 				{
+					if( !$subtitleParams )
+					{
+						$subtitleParams = array();
+					}
+
+					$subtitleParams = array_merge( $subtitleParams, array( "station" => $station->name ) );
+
 					// add station to the response
 					$response->add( $station->id, $station->name, $station->name,
-							$titlePrefix.$station->name.$titleSuffix,
+							$dictionary->get( $subtitle, $subtitleParams ),
 							WorkflowUtil::getImage( "station.png" ), !$isOk ? "yes" : "no",
 							$okPrefix.$station->name.$okSuffix );
 				}
 				elseif ( count( $stations ) === 1 )
 				{
 					// the single station is excluded -> message
-					$response->add( "nothing", "nothing", "Du befindest dich bereits hier",
-							$station->name . " ist dein Startbahnhof. ",
+					$response->add( "nothing", "nothing", $dictionary->get( "errors.alreadyatstart-title" ),
+							$dictionary->get( "errors.alreadyatstart-subtitle", array( "station" => $station->name ) ),
 							WorkflowUtil::getImage( "icon.png" ) );
 				}
 			}
@@ -96,9 +110,8 @@ abstract class TransportUtil
 		else
 		{
 			// no results found (or server could be down) -> message
-			$response->add( "nothing", "nothing", "Hier ist nichts ...",
-					"Es konnte leider kein passender Ort gefunden werden.",
-					WorkflowUtil::getImage( "icon.png" ) );
+			$response->add( "nothing", "nothing", $dictionary->get( "errors.notplacefound-title" ),
+					$dictionary->get( "errors.noplacefound-subtitle" ), WorkflowUtil::getImage( "icon.png" ) );
 		}
 	}
 
@@ -137,6 +150,8 @@ abstract class TransportUtil
 	public static function addConnections( &$response, $from, $to, $date,
 			$withFromInSubtext, $withToInSubtext, $max = 6 )
 	{
+		$dictionary = I18NUtil::getDictionary();
+
 		if( strtolower( $from ) != strtolower( $to ) )
 		{
 			$onlyDate = $date->format( "Y-m-d" );
@@ -146,7 +161,7 @@ abstract class TransportUtil
 				"date" => $onlyDate, "time" => $onlyTime );
 
 			// get the results
-			$json = WorkflowUtil::request( self::URL_CONNECTIONS . http_build_query( $params ) );
+			$json = WorkflowUtil::request( self::URL_CONNECTIONS . "?" . http_build_query( $params ) );
 			$result = json_decode( $json );
 			$connections = $result->connections;
 
@@ -154,7 +169,7 @@ abstract class TransportUtil
 			{
 				$class = self::getClass();
 
-				$timezone = new DateTimeZone( "Europe/Zurich" );
+				$timezone = new DateTimeZone( "Europe/Zurich" ); // TODO: use right timezone.
 				$now = new DateTime( null, $timezone );
 
 				// used to determinate index of connection on trnsprt.ch
@@ -173,65 +188,58 @@ abstract class TransportUtil
 
 					$capacity = $class === 2 ? $connection->capacity2nd : $connection->capacity1st;
 
+					// TODO: create helper function for this
 					$departureText = "";
 					if( $secondsToDeparture <= -60 * 60 * 2 ) // more than 2 hours ago
 					{
-						$departureText .= "um " . $departure->format( "H:i" ) . " Uhr";
+						$departureText = $departure->format( $dictionary->get( "relative-time.morethan2hago" ) );
 					}
-					else if( $secondsToDeparture <= -60 * 62 ) // between 2 minutes and 2 hours ago
+					else if( $secondsToDeparture <= -60 * 61 ) // between 2 minutes and 2 hours ago
 					{
-						$departureText = $relativeDeparture->format( "vor 1:%I Stunde" );
-					}
-					else if( $secondsToDeparture <= -60 * 61 ) // an 1 hour and one minute ago
-					{
-						$departureText = "vor 1:01 Stunde";
+						$departureText = $relativeDeparture->format( $dictionary->get( "relative-time.morethan1hago" ) );
 					}
 					else if( $secondsToDeparture <= -60 * 60 ) // an 1 hour ago
 					{
-						$departureText = "vor 1 Stunde";
+						$departureText = $dictionary->get( "relative-time.1hago" );
 					}
 					else if( $secondsToDeparture <= -120 ) // less than 2 minutes ago
 					{
-						$departureText = $relativeDeparture->format( "vor %i Minuten" );
+						$departureText = $relativeDeparture->format( $dictionary->get( "relative-time.lessthan1hago" ) );
 					}
 					else if( $secondsToDeparture <= -60 ) // less than a minute ago
 					{
-						$departureText = "vor 1 Minute";
+						$departureText = $dictionary->get( "relative-time.1minago" );
 					}
 					else if( $secondsToDeparture <= 60 ) // in less than 1 minute
 					{
-						$departureText = "jetzt";
+						$departureText = $dictionary->get( "relative-time.now" );
 					}
 					else if( $secondsToDeparture < 120 ) // in less than 2 minutes
 					{
-						$departureText = "in 1 Minute";
+						$departureText = $dictionary->get( "relative-time.1min" );
 					}
 					else if( $secondsToDeparture < 60 * 60 ) // in less than 1 hour
 					{
-						$departureText = $relativeDeparture->format( "in %i Minuten" );
+						$departureText = $relativeDeparture->format( $dictionary->get( "relative-time.lessthan1h" ) );
 					}
 					else if( $secondsToDeparture < 60 * 61 ) // in 1 hour
 					{
-						$departureText = "in 1 Stunde";
-					}
-					else if( $secondsToDeparture < 60 * 62 ) // in 1 hour and one minute
-					{
-						$departureText = "in 1:01 Stunde";
+						$departureText = $dictionary->get( "relative-time.1h" );
 					}
 					else if( $secondsToDeparture <= 60 * 60 * 2 ) // in less than 2 hours
 					{
-						$departureText = $relativeDeparture->format( "in 1:%I Stunde" );
+						$departureText = $relativeDeparture->format( $dictionary->get( "relative-time.morethan1h" ) );
 					}
 					else // in more than 2 hours
 					{
-						$departureText .= "um " . $departure->format( "H:i" ) . " Uhr";
+						$departureText = $departure->format( $dictionary->get( "relative-time.morethan2h" ) );
 					}
 
 					if( !empty( $connection->from->prognosis->departure ) )
 					{
 						$newDeparture = new DateTime( $connection->from->prognosis->departure, $timezone );
-						$departureText .= " (+" . WorkflowUtil::formatTimeDiff(
-								$newDeparture->diff( $departure ), " Stunden", " Stunde", " Minuten" ) . ")";
+						array_push( $subtitles, $dictionary->get( "connection-titles.departures-delay", 
+							array( "station" => WorkflowUtil::formatTimeDiff( $newDeparture->diff( $departure ), false ) ) ) );
 					}
 
 					if( $capacity )
@@ -243,94 +251,94 @@ abstract class TransportUtil
 						}
 					}
 
-					// subtitle
-					$subtitle = "";
+					// TODO: create SubtitlePart-Objects
+					// subtitles
+					$subtitles = array();
 					if( $secondsToDeparture <= 60 * 60 * 2 && $secondsToDeparture >= -60 * 60 * 2 )
 					{
-						$subtitle = "um " . $departure->format( "H:i" ) . " Uhr";
+						array_push( $subtitles, $dictionary->get( "connection-subtitles.departure-time", array( "time" => $departure->format( "H:i" ) ) ) );
 					}
 					else if( $now->format( "Y-m-d" ) != $departure->format( "Y-m-d" ) )
 					{
-						$subtitle = "am " . $departure->format( "d.m.Y" );
+						array_push( $subtitles, $dictionary->get( "connection-subtitles.departure-date", array( "date" => $departure->format( "d.m.Y" ) ) ) );
 					}
 
-					if( $connection->from->platform != null )
+					if( $connection->from->platform )
 					{
-						if( strlen( $subtitle ) > 0 )
+						if( empty( $connection->from->prognosis->platform ) )
 						{
-							$subtitle .= " ";
+							array_push( $subtitles, $dictionary->get( "connection-subtitles.departure-track", 
+								array( "track" => $connection->from->platform ) ) );
 						}
-
-						$subtitle .= "ab Gleis ";
-
-						if( !empty( $connection->from->prognosis->platform ) )
+						else
 						{
-							$subtitle .= $connection->from->prognosis->platform . " statt ";
+							array_push( $subtitles, $dictionary->get( "connection-subtitles.departure-track-changed", 
+								array( "oldtrack" => $connection->from->platform, "track" => $connection->from->prognosis->platform ) ) );
 						}
-
-						$subtitle .= $connection->from->platform;
 					}
 
-					if( strlen( $subtitle ) > 0 )
+					if( empty( $connection->to->prognosis->arrival ) )
 					{
-						$subtitle .= ", ";
+						array_push( $subtitles, $dictionary->get( "connection-subtitles.arrival-time", 
+								array( "time" => $arrival->format( "H:i" ) ) ) );
 					}
-
-					$subtitle .= "an " . $arrival->format( "H:i" )." Uhr";
-					if( !empty( $connection->to->prognosis->arrival ) )
+					else
 					{
 						$newArrival = new DateTime( $connection->to->prognosis->arrival, $timezone );
-						$subtitle .= " (+" . WorkflowUtil::formatTimeDiff(
-								$newArrival->diff( $arrival ), "h", "h", "min" ) . ")";
+						array_push( $subtitles, $dictionary->get( "connection-subtitles.arrival-time-delay", 
+								array( "time" => $arrival->format( "H:i" ), "delay" => WorkflowUtil::formatTimeDiff( 
+										$newArrival->diff( $arrival ), true ) ) ) );
 					}
 
-					$subtitle .= ", dauert " . WorkflowUtil::formatTimeDiff( $duration );
-
-					$subtitle .= ( $withFromInSubtext ? " von " . $connection->from->station->name : "" )
-							. ( $withToInSubtext ? " nach " . $connection->to->station->name : "" );
-
-					$sections = $connection->sections;
-					if( $sections )
+					array_push( $subtitles, $dictionary->get( "connection-subtitles.duration", 
+							array( "duration" => WorkflowUtil::formatTimeDiff( $duration ) ) ) );
+					
+					if( $withFromInSubtext )
 					{
-						$subtitle .= ", mit";
-						$sectionIndex = 0;
-						$total = count( $sections ) - 1;
+						array_push( $subtitles, $dictionary->get( "connection-subtitles.departure-station", 
+							array( "station" => $connection->from->station->name ) ) );
+					}
+					
+					if( $withToInSubtext )
+					{
+						array_push( $subtitles, $dictionary->get( "connection-subtitles.arrival-station", 
+							array( "station" => $connection->to->station->name ) ) );
+					}
 
-						foreach( $sections as $section )
+					$sections = array();
+					foreach( $connection->sections as $section )
+					{
+						if( $section->journey && $section->journey->category )
 						{
-							if( $section->journey && $section->journey->category )
+							$sectionText = "";
+
+							if( array_key_exists( $section->journey->category, self::$badnames ) )
 							{
-								if( $sectionIndex > 0 )
-								{
-									$subtitle .= $sectionIndex < $total ? ", " : " und ";
-								}
-								else
-								{
-									$subtitle .= " ";
-								}
-
-								if( array_key_exists( $section->journey->category, self::$badnames ) )
-								{
-									$subtitle .= self::$badnames[ $section->journey->category ]
-											. " " . $section->journey->number;
-								}
-								else
-								{
-									$subtitle .= $section->journey->category;
-								}
-
-								$sectionIndex++;
+								$sectionText = $dictionary->get( "badnames." . self::$badnames[ $section->journey->category ] );
 							}
 							else
 							{
-								$total--;
+								$sectionText = $section->journey->category;
 							}
+
+							if( in_array( $section->journey->category, self::$categoriesWithNumber ) )
+							{
+								$parts = explode( " ", $section->journey->name );
+								if( count( $parts ) >= 2 )
+								{
+									$sectionText .= $parts[1];
+								}
+							}
+
+							array_push( $sections, $sectionText );
 						}
 					}
+					
+					array_push( $subtitles, $dictionary->get( "connection-subtitles.transporttypes", array( "types" => implode( ", ", $sections ) ) ) );
 
-					if( strlen( $subtitle ) > 0 )
+					if( count( $subtitles ) )
 					{
-						$subtitle .= ".";
+						$subtitle = implode( ", ", $subtitles ) . ".";
 					}
 
 					// if there are connections with the same departure time, increment the amount per site.
@@ -339,17 +347,14 @@ abstract class TransportUtil
 						$perSite++;
 					}
 
+					// create a more a less unique identifier for this connection.
 					$id = $connection->from->station->id . "-" . $connection->to->station->id . "-" .
 							$connection->from->departure;
 
-					$url = "/to/" . urlencode( $connection->to->station->name ) .
-							"/from/" . urlencode( $connection->from->station->name ) .
-							"/at/" . urlencode( $date->format( "Y-m-d\TH:i" ) ) .
-							"?page=" . floor( $connectionIndex / $perSite ) .
-							"&c=" . ( ( $connectionIndex	 % $perSite ) + 1 );
+					$url = self::getConnectionURL( $connection->to->station->name, $connection->from->station->name, 
+							$date, floor( $connectionIndex / $perSite ),  ( $connectionIndex % $perSite ) + 1 );
 
-					$response->add( $id, $url, $departureText, $subtitle,
-							WorkflowUtil::getImage( "arrow.png" ) );
+					$response->add( $id, $url, $departureText, $subtitle, WorkflowUtil::getImage( "arrow.png" ) );
 
 					$connectionIndex++;
 					$lastDepartureTime = $connection->from->departure;
@@ -357,17 +362,21 @@ abstract class TransportUtil
 			}
 			else
 			{
-				$response->add( "nothing", "nothing", "Nichts gefunden ...",
-						"Leider konnten keine Verbindungen gefunden werden.",
-						WorkflowUtil::getImage( "icon.png" ) );
+				$response->add( "nothing", "nothing", $dictionary->get( "errors.noconnectionsfound-title" ),
+						$dictionary->get( "errors.noconnectionsfound-subtitle" ), WorkflowUtil::getImage( "icon.png" ) );
 			}
 		}
 		else
 		{
-			$response->add( "nothing", "nothing", "Für das braucht es keinen öffentlichen Verkehr ...",
-					"Du kannst nicht denselben Ort für den Start und das Ziel verwenden.",
-					WorkflowUtil::getImage( "icon.png" ) );
+			$response->add( "nothing", "nothing", $dictionary->get( "errors.samestartandendplace-title" ),
+					$dictionary->get( "errors.samestartandendplace-subtitle" ), WorkflowUtil::getImage( "icon.png" ) );
 		}
+	}
+	
+	public static function getConnectionURL( $departureStation, $arrivalStation, $departureDate, $page, $index )
+	{
+		return sprintf( "/to/%s/from/%s/at/%s?page=%s&c=%s", urlencode( $departureStation ), 
+				urlencode( $arrivalStation ), urlencode( $departureDate->format( "Y-m-d\TH:i" ) ), $page, $index );
 	}
 
 	/**

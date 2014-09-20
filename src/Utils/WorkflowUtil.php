@@ -1,6 +1,8 @@
 <?php
 namespace Utils;
 
+use Utils\I18N\I18NUtil;
+
 include( "src/Initializer.php" );
 
 /**
@@ -84,24 +86,25 @@ abstract class WorkflowUtil
 	 * Returns a human readable time string for the given time difference.
 	 * Supports only minutes and hours.
 	 * @param diff DateInterval the differece which should be beautified.
-	 * @param name for 1 hour. default is " Stunde". Please include the first space if neccessary.
-	 * @param name for multiple hours. default is " Stunden". Please include the first space if neccessary.
-	 * @param name for minutes. default is " Minuten". Please include the first space if neccessary.
+	 * @param short if true the time will returned with the abbreviation of the time unit. (default = false)
 	 * @return a beautiful time string.
 	 */
-	public static function formatTimeDiff( $diff, $hour = " Stunde", $hours = " Stunden", $min = " Minuten" )
+	public static function formatTimeDiff( $diff, $short = false )
 	{
+		$dictionary = I18NUtil::getDictionary();
+		$suffix = $short ? "-short" : "-long";
+
 		if( intval( $diff->format( "%h" ) ) > 1 )
 		{
-			return $diff->format( "%h:%I" ).$hours;
+			return $diff->format( $dictionary->get( "time.hours" . $suffix ) );
 		}
 		else if( intval( $diff->format( "%h" ) ) === 1 )
 		{
-			return $diff->format( "%h:%I" ).$hour;
+			return $diff->format( $dictionary->get( "time.hour" . $suffix ) );
 		}
 		else
 		{
-			return $diff->format( "%i" ).$min;
+			return $diff->format( $dictionary->get( "time.minutes" . $suffix ) );
 		}
 	}
 
@@ -133,7 +136,7 @@ abstract class WorkflowUtil
 	 */
 	private static function getFilename( $filename )
 	{
-		$file = exec( 'printf $HOME' ) . "/Library/Application Support/Alfred 2/Workflow Data/" . self::$bundle . "/";
+		$file = "~/Library/Application Support/Alfred 2/Workflow Data/" . self::$bundle . "/";
 
 		if ( !file_exists( $file ) )
 		{

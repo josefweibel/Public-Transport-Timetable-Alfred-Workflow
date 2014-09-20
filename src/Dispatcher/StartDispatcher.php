@@ -14,6 +14,6 @@ use Utils\WorkflowUtil;
 $response = new Response();
 
 $query = WorkflowUtil::normalize( trim( $argv[1] ) );
-TransportUtil::addLocations( $response, $query, "", "", " als Heimort festlegen." );
+TransportUtil::addLocations( $response, $query, "", "startselector.subtitle" );
 
 echo $response->export();
