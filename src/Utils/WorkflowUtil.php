@@ -136,14 +136,14 @@ abstract class WorkflowUtil
 	 */
 	private static function getFilename( $filename )
 	{
-		$file = "~/Library/Application Support/Alfred 2/Workflow Data/" . self::$bundle . "/";
+		$path = exec( 'printf $HOME' ) . "/Library/Application Support/Alfred 2/Workflow Data/" . self::$bundle . "/";
 
-		if ( !file_exists( $file ) )
+		if ( !file_exists( $path ) )
 		{
-			exec( "mkdir '" . $file . "'" );
+			exec( "mkdir '" . $path . "'" );
 		}
-
-		return $file . $filename . ".json";
+	
+		return $path . $filename . ".json";
 	}
 
 	/**
@@ -154,12 +154,13 @@ abstract class WorkflowUtil
 	private static function getContentOfJsonFile( $filename )
 	{
 		$file = self::getFilename( $filename );
+		
 		if( file_exists( $file ) )
 		{
 			$content = json_decode( file_get_contents( $file ), true );
 		}
 
-		if( !is_array( $content ) )
+		if( !isset( $content ) || !is_array( $content ) )
 		{
 			$content = array();
 		}
