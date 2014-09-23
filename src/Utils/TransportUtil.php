@@ -202,51 +202,7 @@ abstract class TransportUtil
 					$capacity = $class === 2 ? $connection->capacity2nd : $connection->capacity1st;
 
 					// TODO: create helper function for this
-					$departureText = "";
-					if( $secondsToDeparture <= -60 * 60 * 2 ) // more than 2 hours ago
-					{
-						$departureText = $departure->format( $dictionary->get( "relative-time.morethan2hago" ) );
-					}
-					else if( $secondsToDeparture <= -60 * 61 ) // between 2 minutes and 2 hours ago
-					{
-						$departureText = $relativeDeparture->format( $dictionary->get( "relative-time.morethan1hago" ) );
-					}
-					else if( $secondsToDeparture <= -60 * 60 ) // an 1 hour ago
-					{
-						$departureText = $dictionary->get( "relative-time.1hago" );
-					}
-					else if( $secondsToDeparture <= -120 ) // less than 2 minutes ago
-					{
-						$departureText = $relativeDeparture->format( $dictionary->get( "relative-time.lessthan1hago" ) );
-					}
-					else if( $secondsToDeparture <= -60 ) // less than a minute ago
-					{
-						$departureText = $dictionary->get( "relative-time.1minago" );
-					}
-					else if( $secondsToDeparture <= 60 ) // in less than 1 minute
-					{
-						$departureText = $dictionary->get( "relative-time.now" );
-					}
-					else if( $secondsToDeparture < 120 ) // in less than 2 minutes
-					{
-						$departureText = $dictionary->get( "relative-time.1min" );
-					}
-					else if( $secondsToDeparture < 60 * 60 ) // in less than 1 hour
-					{
-						$departureText = $relativeDeparture->format( $dictionary->get( "relative-time.lessthan1h" ) );
-					}
-					else if( $secondsToDeparture < 60 * 61 ) // in 1 hour
-					{
-						$departureText = $dictionary->get( "relative-time.1h" );
-					}
-					else if( $secondsToDeparture <= 60 * 60 * 2 ) // in less than 2 hours
-					{
-						$departureText = $relativeDeparture->format( $dictionary->get( "relative-time.morethan1h" ) );
-					}
-					else // in more than 2 hours
-					{
-						$departureText = $departure->format( $dictionary->get( "relative-time.morethan2h" ) );
-					}
+					$departureText = DateUtil::formatRelativeTime( $secondsToDeparture, $departure );
 
 					if( !empty( $connection->from->prognosis->departure ) )
 					{
