@@ -4,6 +4,7 @@ namespace TimeKeywords;
 include( "src/Initializer.php" );
 
 use TimeKeywords\TodayTimeKeyword;
+use Utils\I18N\I18NUtil;
 
 /**
  * The same as @link TodayTimeKeyword but with the keyword 'um'.
@@ -16,7 +17,10 @@ class AtTimeKeyword extends TodayTimeKeyword
 	 */
 	public function __construct()
 	{
-		$this->keyword = "um";
-		$this->atKeyword = "";
+        parent::__construct();
+
+        $dictionary = I18NUtil::getDictionary();
+        $this->keyword = $dictionary->get( "timekeywords.attime" );
+        $this->atKeyword = "";
 	}
 }

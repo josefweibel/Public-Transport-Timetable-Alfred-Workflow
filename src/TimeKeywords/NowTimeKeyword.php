@@ -6,6 +6,7 @@ include( "src/Initializer.php" );
 use DateTime;
 use DateTimeZone;
 use TimeKeywords\ITimeKeyword;
+use Utils\I18N\I18NUtil;
 
 /**
  * Default TimeKeyword. The time is the current time.
@@ -16,7 +17,13 @@ class NowTimeKeyword implements ITimeKeyword
 	/**
 	 * @var string the keyword of this TimeKeyword.
 	 */
-	protected $keyword = "jetzt";
+	protected $keyword = null;
+
+    public function __construct()
+    {
+        $dictionary = I18NUtil::getDictionary();
+        $this->keyword = $dictionary->get( "timekeywords.now" );
+    }
 
 	/**
 	 * @return string check if the keyword is at the end.
@@ -49,7 +56,7 @@ class NowTimeKeyword implements ITimeKeyword
 	 */
 	public function getTime( $query )
 	{
-		$timezone = new DateTimeZone( "Europe/Zurich" );
+		$timezone = new DateTimeZone( "Europe/Zurich" ); // TODO use right timezone
 		return new DateTime( "now", $timezone );
 	}
 

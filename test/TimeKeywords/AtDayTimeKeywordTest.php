@@ -16,7 +16,7 @@ class AtDayTimeKeywordTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->keyword = new AtDayTimeKeyword();
-        $this->timezone = new DateTimeZone( "Europe/Zurich" );
+        $this->timezone = new DateTimeZone( "Europe/Zurich" ); // TODO use right timezone
     }
 
 	public function testMatches()

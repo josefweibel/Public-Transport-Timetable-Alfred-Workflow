@@ -4,6 +4,7 @@ namespace TimeKeywords;
 include( "src/Initializer.php" );
 
 use TimeKeywords\AHourMinuteTimeKeyword;
+use Utils\I18N\I18NUtil;
 
 /**
  * Represents a time for the day after tomorrow.
@@ -16,7 +17,10 @@ class DayAfterTomorrowTimeKeyword extends AHourMinuteTimeKeyword
 	 */
 	public function __construct()
 	{
-		$this->keyword = "übermorgen";
+        parent::__construct();
+
+        $dictionary = I18NUtil::getDictionary();
+        $this->keyword = $dictionary->get( "timekeywords.dayaftertomorrow" );
 	}
 
 	/**

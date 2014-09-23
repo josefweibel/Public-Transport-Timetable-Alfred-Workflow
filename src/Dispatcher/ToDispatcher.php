@@ -43,8 +43,8 @@ else if( $timeKeyword )
 else
 {
 	TransportUtil::addLocations( $response, $query, $normHome,
-			$isTo ? "to.to-subtitle" : "to.from-subtitle", array( "home" => $home ),
-			true, "", " " . TimeKeywordManager::getDefaultTimeKeyword() );
+			$isTo ? "to.to-subtitle" : "to.from-subtitle", array( "home" => $home ), true, "to.fullquery", 
+			array( "timekeyword" => TimeKeywordManager::getDefaultTimeKeyword() ) );
 }
 
 echo $response->export();

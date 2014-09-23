@@ -50,12 +50,11 @@ abstract class TransportUtil
 	 * @param String $subtitle placeholder for the station is 'station'
 	 * @param array $subtitleParams additional params for getting the translation from the dictionary
 	 * @param boolean $isOk
-	 * @param String $okPrefix (optional)
-	 * @param String $okSuffix (optional)
+	 * @param String $okText (optional) dictionary key with placeholder {station}.
 	 * @param int $max (optional, default = 10)
 	 */
-	public static function addLocations( &$response, $query, $exclude, $subtitle, $subtitleParams = null,
-			$isOk = false, $okPrefix = null, $okSuffix = null, $max = 10 )
+	public static function addLocations( &$response, $query, $exclude, $subtitle, 
+			$subtitleParams = null, $isOk = false, $okText = null, $okParams = array(), $max = 10 )
 	{
 		$dictionary = I18NUtil::getDictionary();
 
@@ -92,11 +91,19 @@ abstract class TransportUtil
 
 					$subtitleParams = array_merge( $subtitleParams, array( "station" => $station->name ) );
 
+					if( $okText )
+					{
+						$okText = $dictionary->get( $okText, array_merge( $okParams, array( "station" => $station->name ) ) );
+					}
+					else
+					{
+						$okText = $station->name;
+					}
+					
 					// add station to the response
-					$response->add( $station->id, $station->name, $station->name,
-							$dictionary->get( $subtitle, $subtitleParams ),
-							WorkflowUtil::getImage( "station.png" ), !$isOk ? "yes" : "no",
-							$okPrefix.$station->name.$okSuffix );
+					$response->add( $station->id, $station->name, $station->name, 
+							$dictionary->get( $subtitle, $subtitleParams ), WorkflowUtil::getImage( "station.png" ), 
+							!$isOk ? "yes" : "no", $okText );
 				}
 				elseif ( count( $stations ) === 1 )
 				{
@@ -120,20 +127,26 @@ abstract class TransportUtil
 	 * @param Response $response
 	 * @param String $query
 	 * @param boolean $isOk
-	 * @param String $okPrefix
-	 * @param String $okSuffix
+	 * @param String $okText (optional) dictionary key with placeholder {station}.
 	 */
-	public static function addHomeLocation( &$response, $query, $isOk, $okPrefix, $okSuffix )
+	public static function addHomeLocation( &$response, $query, $isOk, $okText = null, $okParams = array() )
 	{
 		$dictionary = I18NUtil::getDictionary();
 		$keyword = $dictionary->get( self::KEYWORD_HOME );
 
 		if( strpos( $keyword, $query ) !== false )
 		{
-			$response->add( $keyword, $keyword, $keyword,
-					$dictionary->get( self::KEYWORD_HOME . "subtitle" ),
-					WorkflowUtil::getImage( "station.png" ), !$isOk ? "yes" : "no",
-					$okPrefix.$keyword.$okSuffix );
+			if( $okText )
+			{
+				$okText = $dictionary->get( $okText, array_merge( $okParams, array( "station" => $keyword ) ) );
+			}
+			else
+			{
+				$okText = $keyword;
+			}
+			
+			$response->add( $keyword, $keyword, $keyword, $dictionary->get( self::KEYWORD_HOME . "subtitle" ),
+					WorkflowUtil::getImage( "station.png" ), !$isOk ? "yes" : "no", $okText );
 		}
 	}
 

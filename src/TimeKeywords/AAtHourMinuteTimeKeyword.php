@@ -4,13 +4,21 @@ namespace TimeKeywords;
 include( "src/Initializer.php" );
 
 use TimeKeywords\AHourMinuteTimeKeyword;
+use Utils\I18N\I18NUtil;
 
 /**
  * @author Josef Weibel <a href="http://www.josefweibel.ch">www.josefweibel.ch</a>
  */
 abstract class AAtHourMinuteTimeKeyword extends AHourMinuteTimeKeyword
 {
-	private static $onKeyword = "am";
+	private static $onKeyword = null;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $dictionary = I18NUtil::getDictionary();
+        self::$onKeyword = $dictionary->get( "timekeywords.onday" );
+    }
 
 	/**
 	 * [keyword] [hour]:[minute]

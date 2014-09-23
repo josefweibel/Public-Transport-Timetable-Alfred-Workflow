@@ -5,6 +5,7 @@ namespace TimeKeywords;
 use \PHPUnit_Framework_TestCase;
 use \DateTime;
 use \DateTimeZone;
+use Utils\I18N\I18NUtil;
 
 require_once 'src/TimeKeywords/WeekdayTimeKeyword.php';
 
@@ -20,9 +21,11 @@ class WeekdayTimeKeywordTest extends PHPUnit_Framework_TestCase
     
 	public function testMatches()
 	{
-        foreach( WeekdayTimeKeyword::$weekdays as $german => $english )
+		$dictionary = I18NUtil::getDictionary();
+        foreach( WeekdayTimeKeyword::$weekdays as $weekday )
         {
-            $this->keyword = new WeekdayTimeKeyword ( $german );
+            $this->keyword = new WeekdayTimeKeyword( $weekday );
+			$german = $dictionary->get( "weekdays." . $weekday );
             
             $this->assertEquals( 1, preg_match( $this->keyword->getPattern(), "von Zürich HB nach Bern " . $german . " 12:53" ) );
             $this->assertEquals( 1, preg_match( $this->keyword->getPattern(), "nach Basel " . $german . " 3:45" ) );
@@ -48,30 +51,34 @@ class WeekdayTimeKeywordTest extends PHPUnit_Framework_TestCase
 	
 	public function testTimeGetter()
 	{
-        foreach( WeekdayTimeKeyword::$weekdays as $german => $english )
+		$dictionary = I18NUtil::getDictionary();
+        foreach( WeekdayTimeKeyword::$weekdays as $weekday )
         {
-            $this->keyword = new WeekdayTimeKeyword ( $german );
+            $this->keyword = new WeekdayTimeKeyword( $weekday );
+			$german = $dictionary->get( "weekdays." . $weekday );
             
-            $this->assertEquals( new DateTime( $english . " 12:53:00", $this->timezone ), 
+            $this->assertEquals( new DateTime( $weekday . " 12:53:00", $this->timezone ), 
                     $this->keyword->getTime( "von Zürich HB nach Bern " . $german . " 12:53" ) );
-            $this->assertEquals( new DateTime( $english . " 3:45:00", $this->timezone ), 
+            $this->assertEquals( new DateTime( $weekday . " 3:45:00", $this->timezone ), 
                     $this->keyword->getTime( "nach Basel " . $german . " 3:45" ) );
-            $this->assertEquals( new DateTime( $english . " 0:54:00", $this->timezone ), 
+            $this->assertEquals( new DateTime( $weekday . " 0:54:00", $this->timezone ), 
                     $this->keyword->getTime( "von Dietikon nach Genf " . $german . " um 00:54" ) );
-            $this->assertEquals( new DateTime( $english . " 23:59:00", $this->timezone ), 
+            $this->assertEquals( new DateTime( $weekday . " 23:59:00", $this->timezone ), 
                     $this->keyword->getTime( "nach Berlin " . $german . " um 23:59" ) );
-            $this->assertEquals( new DateTime( $english . " 0:54:00", $this->timezone ), 
+            $this->assertEquals( new DateTime( $weekday . " 0:54:00", $this->timezone ), 
                     $this->keyword->getTime( "von Dietikon nach Genf am " . $german . " um 00:54" ) );
-            $this->assertEquals( new DateTime( $english . " 23:59:00", $this->timezone ), 
+            $this->assertEquals( new DateTime( $weekday . " 23:59:00", $this->timezone ), 
                     $this->keyword->getTime( "nach Berlin am " . $german . " um 23:59" ) );
         }
 	}
 	
 	public function testRemoveTimeKeyword()
 	{
-        foreach( WeekdayTimeKeyword::$weekdays as $german => $english )
+		$dictionary = I18NUtil::getDictionary();
+        foreach( WeekdayTimeKeyword::$weekdays as $weekday )
         {
-            $this->keyword = new WeekdayTimeKeyword ( $german );
+            $this->keyword = new WeekdayTimeKeyword( $weekday );
+			$german = $dictionary->get( "weekdays." . $weekday );
             
             $this->assertEquals( "von Zürich HB nach Bern", 
                     $this->keyword->removeTimeKeyword( "von Zürich HB nach Bern " . $german . " 12:53" ) );

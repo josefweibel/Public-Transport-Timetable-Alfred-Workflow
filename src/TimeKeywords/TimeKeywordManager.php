@@ -13,7 +13,7 @@ use TimeKeywords\DayAfterTomorrowTimeKeyword;
 
 /**
  * Manages all @link ITimeKeyword (you don't say ...).
- * Dispatcher have to use this class to get the time of their query.
+ * Dispatchers have to use this class to get the time of their query.
  * @author Josef Weibel <a href="http://www.josefweibel.ch">www.josefweibel.ch</a>
  */
 class TimeKeywordManager
@@ -40,9 +40,9 @@ class TimeKeywordManager
 			self::$keywords[] = new AtDayTimeKeyword();
 			self::$keywords[] = new DayAfterTomorrowTimeKeyword();
 
-			foreach( array_keys( WeekdayTimeKeyword::$weekdays ) as $foreignLanguage )
+			foreach( WeekdayTimeKeyword::$weekdays as $index => $weekday )
 			{
-				self::$keywords[] = new WeekdayTimeKeyword( $foreignLanguage );
+				self::$keywords[] = new WeekdayTimeKeyword( $weekday );
 			}
 		}
 

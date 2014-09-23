@@ -6,7 +6,7 @@ include( "src/Initializer.php" );
 use BadFunctionCallException;
 use DateTime;
 use DateTimeZone;
-use TimeKeywords\ITimeKeyword;
+use Utils\I18N\I18NUtil;
 
 /**
  * An abstract class which can used for TimeKeywords with the following pattern: [keyword] [hour]:[minute]
@@ -22,7 +22,13 @@ abstract class AHourMinuteTimeKeyword implements ITimeKeyword
 	 */
 	protected $keyword = null;
 
-	protected $atKeyword = "um";
+	protected $atKeyword = null;
+    
+    public function __construct()
+    {
+        $dictionary = I18NUtil::getDictionary();
+        $this->atKeyword = $dictionary->get( "timekeywords.attime" );
+    }
 
 	protected static function getTimePattern()
 	{
