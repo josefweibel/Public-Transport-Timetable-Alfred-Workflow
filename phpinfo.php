@@ -1,0 +1,1 @@
+<?php phpinfo() or die; ?>
