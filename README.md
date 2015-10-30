@@ -22,9 +22,9 @@ When you set a start station by typing the following command ...
 ... you can only type the destination into Alfred and get your connections ...
 
     nach Biel jetzt
-	
+
 ... or you if you want to go back home, you can do one of the following query types:
-	
+
 	von Aarau nach Hause jetzt
 	zurück Aarau jetzt
 
@@ -58,3 +58,4 @@ This worklow uses the great [Opendata Transport API](http://transport.opendata.c
 
 ## More information
 In the readme section of the workflow in Alfred or on the [workflow website](http://www.josefweibel.ch/alfred/fahrplan/). Have fun!
+You want to work with me on the website? Please call me!
