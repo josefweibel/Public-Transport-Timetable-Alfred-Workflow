@@ -136,7 +136,7 @@ abstract class WorkflowUtil
 	 */
 	private static function getFilename( $filename )
 	{
-		$path = exec( 'printf $HOME' ) . "/Library/Application Support/Alfred 2/Workflow Data/" . self::$bundle . "/";
+		$path = getenv( 'alfred_workflow_data' );
 
 		if ( !file_exists( $path ) )
 		{
