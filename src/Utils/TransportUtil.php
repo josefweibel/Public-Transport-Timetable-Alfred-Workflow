@@ -40,7 +40,7 @@ abstract class TransportUtil
 	/**
 	 * @var array of service categories in which is it helpful to show the linenumber too.
 	 */
-	public static $categoriesWithNumber = array( "S", "SN", "T", "B", "NFB", "NFT" );
+	public static $categoriesWithNumber = array( "S", "SN", "T", "B", "NFB", "NFT", "BUS" );
 
 	/**
 	 * Adds locations from the Transport API to the given response.
@@ -290,13 +290,9 @@ abstract class TransportUtil
 								$sectionText = $section->journey->category;
 							}
 
-							if( in_array( $section->journey->category, self::$categoriesWithNumber ) )
+							if( $section->journey->number && in_array( $section->journey->category, self::$categoriesWithNumber ) )
 							{
-								$parts = explode( " ", $section->journey->name );
-								if( count( $parts ) >= 2 )
-								{
-									$sectionText .= $parts[1];
-								}
+								$sectionText .= " " . $section->journey->number;
 							}
 
 							array_push( $sections, $sectionText );
