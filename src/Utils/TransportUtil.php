@@ -50,11 +50,11 @@ abstract class TransportUtil
 	 * @param String $subtitle placeholder for the station is 'station'
 	 * @param array $subtitleParams additional params for getting the translation from the dictionary
 	 * @param boolean $isOk
-	 * @param String $okText (optional) dictionary key with placeholder {station}.
+	 * @param String $okTextKey (optional) dictionary key with placeholder {station}.
 	 * @param int $max (optional, default = 10)
 	 */
 	public static function addLocations( &$response, $query, $exclude, $subtitle, 
-			$subtitleParams = null, $isOk = false, $okText = null, $okParams = array(), $max = 10 )
+			$subtitleParams = null, $isOk = false, $okTextKey = null, $okParams = array(), $max = 10 )
 	{
 		$dictionary = I18NUtil::getDictionary();
 
@@ -91,9 +91,9 @@ abstract class TransportUtil
 
 					$subtitleParams = array_merge( $subtitleParams, array( "station" => $station->name ) );
 
-					if( $okText )
+					if( $okTextKey )
 					{
-						$okText = $dictionary->get( $okText, array_merge( $okParams, array( "station" => $station->name ) ) );
+						$okText = $dictionary->get( $okTextKey, array_merge( $okParams, array( "station" => $station->name ) ) );
 					}
 					else
 					{
@@ -127,18 +127,18 @@ abstract class TransportUtil
 	 * @param Response $response
 	 * @param String $query
 	 * @param boolean $isOk
-	 * @param String $okText (optional) dictionary key with placeholder {station}.
+	 * @param String $okTextKey (optional) dictionary key with placeholder {station}.
 	 */
-	public static function addHomeLocation( &$response, $query, $isOk, $okText = null, $okParams = array() )
+	public static function addHomeLocation( &$response, $query, $isOk, $okTextKey = null, $okParams = array() )
 	{
 		$dictionary = I18NUtil::getDictionary();
 		$keyword = $dictionary->get( self::KEYWORD_HOME );
 
 		if( strpos( $keyword, $query ) !== false )
 		{
-			if( $okText )
+			if( $okTextKey )
 			{
-				$okText = $dictionary->get( $okText, array_merge( $okParams, array( "station" => $keyword ) ) );
+				$okText = $dictionary->get( $okTextKey, array_merge( $okParams, array( "station" => $keyword ) ) );
 			}
 			else
 			{
@@ -303,7 +303,8 @@ abstract class TransportUtil
 						}
 					}
 					
-					array_push( $subtitles, $dictionary->get( "connection-subtitles.transporttypes", array( "types" => implode( ", ", $sections ) ) ) );
+					array_push( $subtitles, $dictionary->get( "connection-subtitles.transporttypes",
+							array( "types" => implode( ", ", $sections ) ) ) );
 
 					if( count( $subtitles ) )
 					{
