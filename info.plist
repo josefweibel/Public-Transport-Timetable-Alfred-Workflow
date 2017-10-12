@@ -4,6 +4,8 @@
 <dict>
 	<key>bundleid</key>
 	<string>ch.josefweibel.alfred.publictransport</string>
+	<key>category</key>
+	<string>Tools</string>
 	<key>connections</key>
 	<dict>
 		<key>0D355389-0F73-4CF4-93F3-27AD8EEC4179</key>
@@ -15,6 +17,8 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
+				<key>vitoclose</key>
+				<false/>
 			</dict>
 		</array>
 		<key>0F7CF2D0-94B9-4B5C-95F4-16A7869B3E6D</key>
@@ -26,6 +30,8 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
+				<key>vitoclose</key>
+				<false/>
 			</dict>
 		</array>
 		<key>312149AE-5061-4D27-AFCE-DB7B52B6FEB7</key>
@@ -37,6 +43,8 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
+				<key>vitoclose</key>
+				<false/>
 			</dict>
 		</array>
 		<key>395896E6-7CA4-4598-A319-257F3BD4EC42</key>
@@ -48,6 +56,8 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
+				<key>vitoclose</key>
+				<false/>
 			</dict>
 		</array>
 		<key>5832FF80-CBC7-4024-8550-9563D6EB71E9</key>
@@ -59,6 +69,8 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
+				<key>vitoclose</key>
+				<false/>
 			</dict>
 		</array>
 		<key>5EACFDAB-08C1-461C-A920-EE80BB84A2F6</key>
@@ -70,6 +82,8 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
+				<key>vitoclose</key>
+				<false/>
 			</dict>
 		</array>
 		<key>78FB1493-E816-4FFE-AAD7-3233CBB5EF81</key>
@@ -81,6 +95,8 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
+				<key>vitoclose</key>
+				<false/>
 			</dict>
 		</array>
 		<key>C0C17423-71ED-46A0-AE93-5EC688FB0FCC</key>
@@ -92,6 +108,8 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
+				<key>vitoclose</key>
+				<false/>
 			</dict>
 		</array>
 		<key>C72091C6-BC34-459E-8B1A-00E0B3E6627A</key>
@@ -105,6 +123,8 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
+				<key>vitoclose</key>
+				<false/>
 			</dict>
 		</array>
 		<key>FD06E847-D67D-4AA9-98DF-714201A287D4</key>
@@ -116,6 +136,8 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
+				<key>vitoclose</key>
+				<false/>
 			</dict>
 		</array>
 	</dict>
@@ -132,12 +154,22 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
 				<key>argumenttype</key>
 				<integer>0</integer>
 				<key>escaping</key>
 				<integer>4</integer>
 				<key>keyword</key>
 				<string>nach</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<false/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>2</integer>
 				<key>runningsubtext</key>
 				<string>Es wird nach Orten gesucht. Einen Moment bitte.</string>
 				<key>script</key>
@@ -146,6 +178,10 @@
 # Wenn ein Standard-Startbahnhof angegeben wurde, muss für eine Verbindung ab diesem lediglich noch der Zielbahnhof eingegeben werden, für welchen es auch Vorschläge gibt.
 
 php -f src/Dispatcher/ToDispatcher.php "{query}" 1</string>
+				<key>scriptargtype</key>
+				<integer>0</integer>
+				<key>scriptfile</key>
+				<string></string>
 				<key>subtext</key>
 				<string>Die nächsten Verbindungen anhand dem Standard-Startort und einem Endort suchen.</string>
 				<key>title</key>
@@ -160,7 +196,7 @@ php -f src/Dispatcher/ToDispatcher.php "{query}" 1</string>
 			<key>uid</key>
 			<string>C0C17423-71ED-46A0-AE93-5EC688FB0FCC</string>
 			<key>version</key>
-			<integer>0</integer>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -187,17 +223,27 @@ php -f src/Dispatcher/ToDispatcher.php "{query}" 1</string>
 			<key>uid</key>
 			<string>DA1650D7-A977-423C-9FAE-613D7BCB54FD</string>
 			<key>version</key>
-			<integer>1</integer>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
 				<key>argumenttype</key>
 				<integer>1</integer>
 				<key>escaping</key>
 				<integer>4</integer>
 				<key>keyword</key>
 				<string>von</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<false/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>2</integer>
 				<key>runningsubtext</key>
 				<string>Es wird nach Orten gesucht. Einen Moment bitte.</string>
 				<key>script</key>
@@ -206,6 +252,10 @@ php -f src/Dispatcher/ToDispatcher.php "{query}" 1</string>
 # Sucht die nächsten Verbindungen vom Start- zum Zielbahnhof. Für die Bahnhöfe werden Vorschläge angeboten.
 
 php -f src/Dispatcher/FromToDispatcher.php "{query}"</string>
+				<key>scriptargtype</key>
+				<integer>0</integer>
+				<key>scriptfile</key>
+				<string></string>
 				<key>subtext</key>
 				<string>Die nächsten Verbindungen anhand einem Start- und einem Endort suchen.</string>
 				<key>title</key>
@@ -220,15 +270,21 @@ php -f src/Dispatcher/FromToDispatcher.php "{query}"</string>
 			<key>uid</key>
 			<string>0D355389-0F73-4CF4-93F3-27AD8EEC4179</string>
 			<key>version</key>
-			<integer>0</integer>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>concurrently</key>
+				<false/>
 				<key>escaping</key>
 				<integer>4</integer>
 				<key>script</key>
 				<string>open "http://trnsprt.ch{query}"</string>
+				<key>scriptargtype</key>
+				<integer>0</integer>
+				<key>scriptfile</key>
+				<string></string>
 				<key>type</key>
 				<integer>0</integer>
 			</dict>
@@ -237,7 +293,7 @@ php -f src/Dispatcher/FromToDispatcher.php "{query}"</string>
 			<key>uid</key>
 			<string>C72091C6-BC34-459E-8B1A-00E0B3E6627A</string>
 			<key>version</key>
-			<integer>0</integer>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -264,17 +320,27 @@ php -f src/Dispatcher/FromToDispatcher.php "{query}"</string>
 			<key>uid</key>
 			<string>0F7CF2D0-94B9-4B5C-95F4-16A7869B3E6D</string>
 			<key>version</key>
-			<integer>1</integer>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
 				<key>argumenttype</key>
 				<integer>0</integer>
 				<key>escaping</key>
 				<integer>4</integer>
 				<key>keyword</key>
 				<string>zurück</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<false/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>2</integer>
 				<key>runningsubtext</key>
 				<string>Es wird nach Orten gesucht. Einen Moment bitte.</string>
 				<key>script</key>
@@ -283,6 +349,10 @@ php -f src/Dispatcher/FromToDispatcher.php "{query}"</string>
 # Sucht die nächsten Verbindungen um vom angegebenen Startbahnhof zum definierten Heimbahnhof zu gelangen.
 
 php -f src/Dispatcher/ToDispatcher.php "{query}" 0</string>
+				<key>scriptargtype</key>
+				<integer>0</integer>
+				<key>scriptfile</key>
+				<string></string>
 				<key>subtext</key>
 				<string>Die nächsten Verbindungen anhand einem Start- und einem Endort suchen.</string>
 				<key>title</key>
@@ -297,7 +367,7 @@ php -f src/Dispatcher/ToDispatcher.php "{query}" 0</string>
 			<key>uid</key>
 			<string>395896E6-7CA4-4598-A319-257F3BD4EC42</string>
 			<key>version</key>
-			<integer>0</integer>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -324,17 +394,27 @@ php -f src/Dispatcher/ToDispatcher.php "{query}" 0</string>
 			<key>uid</key>
 			<string>5832FF80-CBC7-4024-8550-9563D6EB71E9</string>
 			<key>version</key>
-			<integer>1</integer>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
 				<key>argumenttype</key>
 				<integer>0</integer>
 				<key>escaping</key>
 				<integer>4</integer>
 				<key>keyword</key>
 				<string>fahrplan start</string>
+				<key>queuedelaycustom</key>
+				<integer>1</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<false/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
 				<key>runningsubtext</key>
 				<string>Es wird nach Orten gesucht. Einen Moment bitte.</string>
 				<key>script</key>
@@ -343,6 +423,10 @@ php -f src/Dispatcher/ToDispatcher.php "{query}" 0</string>
 # Mit diesem Befehl kann ein Standard-Startbahnhof festgelegt werden. Beispielsweise die Busstation vor dem Haus. So können noch schneller Verbindungen gefunden werden.
 
 php -f src/Dispatcher/StartDispatcher.php "{query}"</string>
+				<key>scriptargtype</key>
+				<integer>0</integer>
+				<key>scriptfile</key>
+				<string></string>
 				<key>subtext</key>
 				<string>Den Standard-Startort festlegen.</string>
 				<key>title</key>
@@ -357,11 +441,13 @@ php -f src/Dispatcher/StartDispatcher.php "{query}"</string>
 			<key>uid</key>
 			<string>78FB1493-E816-4FFE-AAD7-3233CBB5EF81</string>
 			<key>version</key>
-			<integer>0</integer>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>concurrently</key>
+				<false/>
 				<key>escaping</key>
 				<integer>0</integer>
 				<key>script</key>
@@ -370,6 +456,10 @@ require_once 'src/Utils/WorkflowUtil.php';
 
 WorkflowUtil::setValue( "config", array( "home" =&gt; "{query}" ) );
 echo "Der neue Heimbahnhof ist {query}.";</string>
+				<key>scriptargtype</key>
+				<integer>0</integer>
+				<key>scriptfile</key>
+				<string></string>
 				<key>type</key>
 				<integer>1</integer>
 			</dict>
@@ -378,7 +468,7 @@ echo "Der neue Heimbahnhof ist {query}.";</string>
 			<key>uid</key>
 			<string>5EACFDAB-08C1-461C-A920-EE80BB84A2F6</string>
 			<key>version</key>
-			<integer>0</integer>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -387,11 +477,7 @@ echo "Der neue Heimbahnhof ist {query}.";</string>
 				<false/>
 				<key>onlyshowifquerypopulated</key>
 				<true/>
-				<key>output</key>
-				<integer>0</integer>
 				<key>removeextension</key>
-				<false/>
-				<key>sticky</key>
 				<false/>
 				<key>text</key>
 				<string>{query}</string>
@@ -403,23 +489,37 @@ echo "Der neue Heimbahnhof ist {query}.";</string>
 			<key>uid</key>
 			<string>7C43AE75-9D30-4DA5-B43C-60D840BB93BD</string>
 			<key>version</key>
-			<integer>0</integer>
+			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
 				<key>argumenttype</key>
 				<integer>2</integer>
 				<key>escaping</key>
 				<integer>63</integer>
 				<key>keyword</key>
 				<string>fahrplan klasse</string>
+				<key>queuedelaycustom</key>
+				<integer>1</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<false/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
 				<key>runningsubtext</key>
 				<string>Klassen werden geladen ...</string>
 				<key>script</key>
 				<string># Damit bei der Auslastungsanzeige bei den Verbindungen die Klasse berücksichtigt werden kann, welche auch gefahren wird, kann man mit diesem Befehl zwischen der 1. und 2. wählen.
 
 php -f src/Dispatcher/ClassDispatcher.php</string>
+				<key>scriptargtype</key>
+				<integer>0</integer>
+				<key>scriptfile</key>
+				<string></string>
 				<key>subtext</key>
 				<string>Wird benötigt um die Auslastung bei Verbindungen darzustellen.</string>
 				<key>title</key>
@@ -434,11 +534,13 @@ php -f src/Dispatcher/ClassDispatcher.php</string>
 			<key>uid</key>
 			<string>FD06E847-D67D-4AA9-98DF-714201A287D4</string>
 			<key>version</key>
-			<integer>0</integer>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>concurrently</key>
+				<false/>
 				<key>escaping</key>
 				<integer>0</integer>
 				<key>script</key>
@@ -447,6 +549,10 @@ require_once 'src/Utils/WorkflowUtil.php';
 
 WorkflowUtil::setValue( "config", array( "class" =&gt; {query} ) );
 echo "Die {query}. Klasse wurde als Standard festgelegt.";</string>
+				<key>scriptargtype</key>
+				<integer>0</integer>
+				<key>scriptfile</key>
+				<string></string>
 				<key>type</key>
 				<integer>1</integer>
 			</dict>
@@ -455,7 +561,7 @@ echo "Die {query}. Klasse wurde als Standard festgelegt.";</string>
 			<key>uid</key>
 			<string>312149AE-5061-4D27-AFCE-DB7B52B6FEB7</string>
 			<key>version</key>
-			<integer>0</integer>
+			<integer>2</integer>
 		</dict>
 	</array>
 	<key>readme</key>
@@ -499,61 +605,85 @@ https://github.com/josefweibel/Public-Transport-Timetable-Alfred-Workflow</strin
 	<dict>
 		<key>0D355389-0F73-4CF4-93F3-27AD8EEC4179</key>
 		<dict>
+			<key>xpos</key>
+			<integer>300</integer>
 			<key>ypos</key>
 			<real>180</real>
 		</dict>
 		<key>0F7CF2D0-94B9-4B5C-95F4-16A7869B3E6D</key>
 		<dict>
+			<key>xpos</key>
+			<integer>100</integer>
 			<key>ypos</key>
 			<real>180</real>
 		</dict>
 		<key>312149AE-5061-4D27-AFCE-DB7B52B6FEB7</key>
 		<dict>
+			<key>xpos</key>
+			<integer>500</integer>
 			<key>ypos</key>
 			<real>540</real>
 		</dict>
 		<key>395896E6-7CA4-4598-A319-257F3BD4EC42</key>
 		<dict>
+			<key>xpos</key>
+			<integer>300</integer>
 			<key>ypos</key>
 			<real>300</real>
 		</dict>
 		<key>5832FF80-CBC7-4024-8550-9563D6EB71E9</key>
 		<dict>
+			<key>xpos</key>
+			<integer>100</integer>
 			<key>ypos</key>
 			<real>300</real>
 		</dict>
 		<key>5EACFDAB-08C1-461C-A920-EE80BB84A2F6</key>
 		<dict>
+			<key>xpos</key>
+			<integer>500</integer>
 			<key>ypos</key>
 			<real>420</real>
 		</dict>
 		<key>78FB1493-E816-4FFE-AAD7-3233CBB5EF81</key>
 		<dict>
+			<key>xpos</key>
+			<integer>300</integer>
 			<key>ypos</key>
 			<real>420</real>
 		</dict>
 		<key>7C43AE75-9D30-4DA5-B43C-60D840BB93BD</key>
 		<dict>
+			<key>xpos</key>
+			<integer>700</integer>
 			<key>ypos</key>
 			<real>480</real>
 		</dict>
 		<key>C0C17423-71ED-46A0-AE93-5EC688FB0FCC</key>
 		<dict>
+			<key>xpos</key>
+			<integer>300</integer>
 			<key>ypos</key>
 			<real>60</real>
 		</dict>
 		<key>C72091C6-BC34-459E-8B1A-00E0B3E6627A</key>
 		<dict>
+			<key>xpos</key>
+			<integer>500</integer>
 			<key>ypos</key>
 			<real>180</real>
 		</dict>
 		<key>DA1650D7-A977-423C-9FAE-613D7BCB54FD</key>
 		<dict>
+			<key>xpos</key>
+			<integer>100</integer>
 			<key>ypos</key>
 			<real>60</real>
 		</dict>
 		<key>FD06E847-D67D-4AA9-98DF-714201A287D4</key>
 		<dict>
+			<key>xpos</key>
+			<integer>300</integer>
 			<key>ypos</key>
 			<real>540</real>
 		</dict>
