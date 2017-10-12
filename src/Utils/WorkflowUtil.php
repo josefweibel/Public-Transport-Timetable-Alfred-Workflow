@@ -3,7 +3,7 @@ namespace Utils;
 
 use Utils\I18N\I18NUtil;
 
-include( "src/Initializer.php" );
+include_once( "src/Initializer.php" );
 
 /**
  * A very usefull and beautiful class which helps the workflow developer to create wonderfull workflows.
@@ -137,7 +137,7 @@ abstract class WorkflowUtil
 	private static function getFilename( $filename )
 	{
 		$path = getenv( 'alfred_workflow_data' );
-
+		
 		if ( !file_exists( $path ) )
 		{
 			exec( "mkdir '" . $path . "'" );

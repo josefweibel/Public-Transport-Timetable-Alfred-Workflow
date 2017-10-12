@@ -1,7 +1,7 @@
 <?php
 namespace TimeKeywords;
 
-include( "src/Initializer.php" );
+include_once( "src/Initializer.php" );
 
 use \DateTime;
 use \DateTimeZone;

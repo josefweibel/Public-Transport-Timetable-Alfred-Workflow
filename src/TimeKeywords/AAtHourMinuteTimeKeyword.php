@@ -1,7 +1,7 @@
 <?php
 namespace TimeKeywords;
 
-include( "src/Initializer.php" );
+require_once( "src/Initializer.php" );
 
 use TimeKeywords\AHourMinuteTimeKeyword;
 use Utils\I18N\I18NUtil;

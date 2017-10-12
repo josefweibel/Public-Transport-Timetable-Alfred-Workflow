@@ -1,7 +1,7 @@
 <?php
 namespace Utils\I18N;
 
-include( "src/Initializer.php" );
+include_once( "src/Initializer.php" );
 
 /**
  * Contains translations.

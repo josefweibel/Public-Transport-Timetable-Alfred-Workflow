@@ -1,7 +1,7 @@
 <?php
 namespace Dispatcher;
 
-include( "src/Initializer.php" );
+include_once( "src/Initializer.php" );
 
 use Utils\Response;
 use Utils\TransportUtil;

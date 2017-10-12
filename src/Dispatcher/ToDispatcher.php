@@ -1,7 +1,7 @@
 <?php
 namespace Dispatcher;
 
-include( "src/Initializer.php" );
+require_once( "src/Initializer.php" );
 
 use Utils\Response;
 use TimeKeywords\TimeKeywordManager;
@@ -43,7 +43,7 @@ else if( $timeKeyword )
 else
 {
 	TransportUtil::addLocations( $response, $query, $normHome,
-			$isTo ? "to.to-subtitle" : "to.from-subtitle", array( "home" => $home ), true, "to.fullquery", 
+			$isTo ? "to.to-subtitle" : "to.from-subtitle", array( "home" => $home ), true, "to.fullquery",
 			array( "timekeyword" => TimeKeywordManager::getDefaultTimeKeyword() ) );
 }
 
