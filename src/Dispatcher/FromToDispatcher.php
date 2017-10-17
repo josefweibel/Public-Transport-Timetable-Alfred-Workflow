@@ -49,7 +49,7 @@ else
 
 	$fromHuman = trim( substr( $argv[1], 0, strripos( $argv[1], $fromquery ) ) );
 	$from = trim( substr( $query, 0, $fromEnd ) );
-	$to = trim( substr( $query, $fromEnd + 6 ) );
+	$to = trim( substr( $query, $fromEnd + strlen( $fromquery ) ) );
 
 	if( !$timeKeyword )
 	{
