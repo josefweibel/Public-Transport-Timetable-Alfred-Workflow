@@ -203,12 +203,15 @@ abstract class TransportUtil
 
 					// TODO: create helper function for this
 					$departureText = DateUtil::formatRelativeTime( $secondsToDeparture, $departure );
+					
+					// TODO: create SubtitlePart-Objects
+					$subtitles = array();
 
 					if( !empty( $connection->from->prognosis->departure ) )
 					{
 						$newDeparture = new DateTime( $connection->from->prognosis->departure, $timezone );
 						array_push( $subtitles, $dictionary->get( "connection-titles.departures-delay", 
-							array( "station" => WorkflowUtil::formatTimeDiff( $newDeparture->diff( $departure ), false ) ) ) );
+							array( "delay" => WorkflowUtil::formatTimeDiff( $newDeparture->diff( $departure ), true ) ) ) );
 					}
 
 					if( $capacity )
@@ -220,9 +223,7 @@ abstract class TransportUtil
 						}
 					}
 
-					// TODO: create SubtitlePart-Objects
 					// subtitles
-					$subtitles = array();
 					if( $secondsToDeparture <= 60 * 60 * 2 && $secondsToDeparture >= -60 * 60 * 2 )
 					{
 						array_push( $subtitles, $dictionary->get( "connection-subtitles.departure-time", array( "time" => $departure->format( "H:i" ) ) ) );
